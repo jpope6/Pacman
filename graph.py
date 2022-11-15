@@ -122,7 +122,22 @@ class Graph:
         node13 = Node(287.5, 350)
         node13.add_neighbor(node12, "RIGHT")
 
-        print(node10.neighbors)
+        node14 = Node(287.5, 435)
+        node14.add_neighbor(node13, "UP")
+
+        node15 = Node(200, 435)
+        node15.add_neighbor(node14, "RIGHT")
+        node15.add_neighbor(node8, "UP")
+
+        node16 = Node(287.5, 530)
+        node16.add_neighbor(node14, "UP")
+
+        node17 = Node(287.5, 620)
+        node17.add_neighbor(node16, "UP")
+
+        node18 = Node(200, 620)
+        node18.add_neighbor(node15, "UP")
+        node18.add_neighbor(node17, "RIGHT")
 
         self.nodes = [
             node1,
@@ -138,4 +153,9 @@ class Graph:
             node11,
             node12,
             node13,
+            node14,
+            node15,
+            node16,
+            node17,
+            node18,
         ]
