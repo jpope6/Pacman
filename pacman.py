@@ -45,5 +45,11 @@ class Pacman:
         if self.onNode:
             self.direction = self.target_direction
 
+        if self.target and self.target.neighbors[self.target_direction] == self.node:
+            self.direction = self.target_direction
+            temp = self.node
+            self.node = self.target
+            self.target = temp
+
     def draw(self):
         pg.draw.circle(self.screen, (255, 255, 0), (self.x, self.y), 20)
