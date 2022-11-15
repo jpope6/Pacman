@@ -15,7 +15,7 @@ class Game:
             self.settings.check_events()
             pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
 
-            pg.draw.circle(self.screen, WHITE, (190, 250), 20)
+            pg.draw.circle(self.screen, WHITE, (200, 170), 20)
 
             pg.display.update()
 
