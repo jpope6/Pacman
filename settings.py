@@ -3,6 +3,7 @@ import sys
 
 WHITE = (255, 255, 255)
 
+
 class Settings:
     def __init__(self):
         self.screen_width = 846
@@ -11,8 +12,18 @@ class Settings:
             pg.image.load("./assets/pacman_map.jpg"),
             (self.screen_width, self.screen_height),
         )
+        self.pacman = None
 
     def check_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_UP:
+                    self.pacman.direction = "UP"
+                elif event.key == pg.K_DOWN:
+                    self.pacman.direction = "DOWN"
+                elif event.key == pg.K_LEFT:
+                    self.pacman.direction = "LEFT"
+                elif event.key == pg.K_RIGHT:
+                    self.pacman.direction = "RIGHT"

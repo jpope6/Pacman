@@ -1,6 +1,7 @@
 import pygame as pg
 from settings import *
 from graph import Graph
+from pacman import Pacman
 
 
 class Game:
@@ -12,6 +13,8 @@ class Game:
         pg.display.set_caption("Pacman")
 
         self.graph = Graph(self.screen)
+        self.pacman = Pacman(self.screen, self.graph)
+        self.settings.pacman = self.pacman
 
     def play(self):
         while True:
@@ -20,6 +23,8 @@ class Game:
 
             self.graph.draw()
             self.graph.draw_edge()
+            self.pacman.draw()
+            self.pacman.move()
 
             pg.display.update()
 

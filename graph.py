@@ -3,8 +3,10 @@ from settings import *
 
 
 class Node:
-    def __init__(self, coordinates):
-        self.coordinates = coordinates
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.coordinates = (self.x, self.y)
         self.neighbors = {"LEFT": None, "RIGHT": None, "UP": None, "DOWN": None}
 
     def add_neighbor(self, neighbor, direction):
@@ -80,14 +82,14 @@ class Graph:
             node.draw(self.screen)
 
     def add_nodes(self):
-        node1 = Node((50, 50))
-        node2 = Node((50, 170))
+        node1 = Node(50, 50)
+        node2 = Node(50, 170)
         node1.add_neighbor(node2, "DOWN")
 
-        node3 = Node((200, 50))
+        node3 = Node(200, 50)
         node1.add_neighbor(node3, "RIGHT")
 
-        node4 = Node((200, 170))
+        node4 = Node(200, 170)
         node2.add_neighbor(node4, "RIGHT")
         node3.add_neighbor(node4, "DOWN")
 
