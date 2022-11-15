@@ -139,6 +139,38 @@ class Graph:
         node18.add_neighbor(node15, "UP")
         node18.add_neighbor(node17, "RIGHT")
 
+        node19 = Node(50, 620)
+        node19.add_neighbor(node18, "RIGHT")
+
+        node20 = Node(50, 710)
+        node20.add_neighbor(node19, "UP")
+
+        node21 = Node(105, 710)
+        node21.add_neighbor(node20, "LEFT")
+
+        node22 = Node(200, 710)
+        node22.add_neighbor(node18, "UP")
+
+        node23 = Node(287.5, 710)
+        node23.add_neighbor(node22, "LEFT")
+
+        node24 = Node(375, 620)
+        node24.add_neighbor(node17, "LEFT")
+
+        node25 = Node(375, 710)
+        node25.add_neighbor(node24, "UP")
+        node25.add_neighbor(node23, "LEFT")
+
+        node26 = Node(105, 800)
+        node26.add_neighbor(node21, "UP")
+
+        node27 = Node(50, 800)
+        node27.add_neighbor(node26, "RIGHT")
+
+        node28 = Node(200, 800)
+        node28.add_neighbor(node26, "LEFT")
+        node28.add_neighbor(node22, "UP")
+
         self.nodes = [
             node1,
             node2,
@@ -158,4 +190,14 @@ class Graph:
             node16,
             node17,
             node18,
+            node19,
+            node20,
+            node21,
+            node22,
+            node23,
+            node24,
+            node25,
+            node26,
+            node27,
+            node28,
         ]
