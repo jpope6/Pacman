@@ -20,10 +20,10 @@ class Settings:
                 sys.exit()
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_UP:
-                    self.pacman.direction = "UP"
+                    self.pacman.target_direction = "UP"
                 elif event.key == pg.K_DOWN:
-                    self.pacman.direction = "DOWN"
+                    self.pacman.target_direction = "DOWN"
                 elif event.key == pg.K_LEFT:
-                    self.pacman.direction = "LEFT"
+                    self.pacman.target_direction = "LEFT"
                 elif event.key == pg.K_RIGHT:
-                    self.pacman.direction = "RIGHT"
+                    self.pacman.target_direction = "RIGHT"
