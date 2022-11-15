@@ -1,5 +1,5 @@
 import pygame as pg
-from settings import Settings
+from settings import *
 
 
 class Game:
@@ -14,6 +14,8 @@ class Game:
         while True:
             self.settings.check_events()
             pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
+
+            pg.draw.circle(self.screen, WHITE, (190, 250), 20)
 
             pg.display.update()
 

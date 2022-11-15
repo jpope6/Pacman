@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 
+WHITE = (255, 255, 255)
 
 class Settings:
     def __init__(self):
