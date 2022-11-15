@@ -25,7 +25,7 @@ class Node:
         neighbor.neighbors[other_direction] = self
 
     def draw(self, screen):
-        pg.draw.circle(screen, WHITE, self.coordinates, 20)
+        self.circle = pg.draw.rect(screen, WHITE, pg.Rect(self.x, self.y, 1, 1))
 
 
 class Graph:
@@ -83,14 +83,59 @@ class Graph:
 
     def add_nodes(self):
         node1 = Node(50, 50)
-        node2 = Node(50, 170)
+        node2 = Node(50, 165)
         node1.add_neighbor(node2, "DOWN")
 
         node3 = Node(200, 50)
         node1.add_neighbor(node3, "RIGHT")
 
-        node4 = Node(200, 170)
+        node4 = Node(200, 165)
         node2.add_neighbor(node4, "RIGHT")
         node3.add_neighbor(node4, "DOWN")
 
-        self.nodes = [node1, node2, node3, node4]
+        node5 = Node(375, 50)
+        node3.add_neighbor(node5, "RIGHT")
+
+        node6 = Node(375, 165)
+        node5.add_neighbor(node6, "DOWN")
+
+        node7 = Node(50, 255)
+        node7.add_neighbor(node2, "UP")
+
+        node8 = Node(200, 255)
+        node8.add_neighbor(node4, "UP")
+        node8.add_neighbor(node7, "LEFT")
+
+        node9 = Node(287.5, 165)
+        node9.add_neighbor(node4, "LEFT")
+        node9.add_neighbor(node6, "RIGHT")
+
+        node10 = Node(287.5, 255)
+        node9.add_neighbor(node10, "DOWN")
+
+        node11 = Node(375, 255)
+        node11.add_neighbor(node10, "LEFT")
+
+        node12 = Node(375, 350)
+        node12.add_neighbor(node11, "UP")
+
+        node13 = Node(287.5, 350)
+        node13.add_neighbor(node12, "RIGHT")
+
+        print(node10.neighbors)
+
+        self.nodes = [
+            node1,
+            node2,
+            node3,
+            node4,
+            node5,
+            node6,
+            node7,
+            node8,
+            node9,
+            node10,
+            node11,
+            node12,
+            node13,
+        ]

@@ -16,6 +16,9 @@ class Pacman:
         self.onNode = True
 
     def move(self):
+        self.change_direction()
+        self.update_node()
+
         if self.direction == "UP" and self.node.neighbors["UP"] is not None:
             self.y += self.move_speed * -1
             self.target = self.node.neighbors["UP"]
@@ -29,12 +32,9 @@ class Pacman:
             self.x += self.move_speed * 1
             self.target = self.node.neighbors["RIGHT"]
 
-        self.change_direction()
-        self.update_node()
-
     def update_node(self):
         for node in self.graph.nodes:
-            if (self.x, self.y) == (node.coordinates):
+            if node.circle.collidepoint(self.x, self.y):
                 self.node = node
                 self.onNode = True
                 break

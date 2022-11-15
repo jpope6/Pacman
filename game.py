@@ -25,6 +25,8 @@ class Game:
             self.graph.draw_edge()
             self.pacman.draw()
             self.pacman.move()
+            
+            # pg.draw.circle(self.screen, WHITE, (375, 345), 20)
 
             pg.display.update()
 
