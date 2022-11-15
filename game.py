@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+from graph import Graph
 
 
 class Game:
@@ -10,12 +11,15 @@ class Game:
         self.screen = pg.display.set_mode(size=self.size)
         pg.display.set_caption("Pacman")
 
+        self.graph = Graph(self.screen)
+
     def play(self):
         while True:
             self.settings.check_events()
             pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
 
-            pg.draw.circle(self.screen, WHITE, (200, 170), 20)
+            self.graph.draw()
+            self.graph.draw_edge()
 
             pg.display.update()
 
