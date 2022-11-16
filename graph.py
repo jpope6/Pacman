@@ -220,6 +220,78 @@ class Graph:
         node43.add_neighbor(node42, "RIGHT")
         node43.add_neighbor(node39, "UP")
 
+        node44 = Node(475, 350)
+        node44.add_neighbor(node37, "UP")
+        node44.add_neighbor(node12, "LEFT")
+
+        node45 = Node(567.5, 350)
+        node45.add_neighbor(node44, "LEFT")
+
+        node46 = Node(567.5, 435)
+        node46.add_neighbor(node45, "UP")
+
+        node47 = Node(650, 435)
+        node47.add_neighbor(node43, "UP")
+        node47.add_neighbor(node46, "LEFT")
+
+        node48 = Node(567.5, 530)
+        node48.add_neighbor(node46, "UP")
+        node48.add_neighbor(node16, "LEFT")
+
+        node49 = Node(567.5, 620)
+        node49.add_neighbor(node48, "UP")
+
+        node50 = Node(650, 620)
+        node50.add_neighbor(node47, "UP")
+        node50.add_neighbor(node49, "LEFT")
+
+        node51 = Node(800, 620)
+        node51.add_neighbor(node50, "LEFT")
+
+        node52 = Node(800, 710)
+        node52.add_neighbor(node51, "UP")
+
+        node53 = Node(475, 620)
+        node53.add_neighbor(node49, "RIGHT")
+
+        node54 = Node(475, 710)
+        node54.add_neighbor(node53, "UP")
+        node54.add_neighbor(node25, "LEFT")
+
+        node55 = Node(567.5, 710)
+        node55.add_neighbor(node54, "LEFT")
+
+        node56 = Node(650, 710)
+        node56.add_neighbor(node55, "LEFT")
+        node56.add_neighbor(node50, "UP")
+
+        node57 = Node(745, 710)
+        node57.add_neighbor(node52, "RIGHT")
+
+        node58 = Node(567.5, 800)
+        node58.add_neighbor(node55, "UP")
+
+        node59 = Node(475, 800)
+        node59.add_neighbor(node58, "RIGHT")
+
+        node60 = Node(475, 890)
+        node60.add_neighbor(node59, "UP")
+        node60.add_neighbor(node32, "LEFT")
+
+        node61 = Node(650, 800)
+        node61.add_neighbor(node56, "UP")
+
+        node62 = Node(745, 800)
+        node62.add_neighbor(node61, "LEFT")
+        node62.add_neighbor(node57, "UP")
+
+        node63 = Node(800, 800)
+        node63.add_neighbor(node62, "LEFT")
+
+        node64 = Node(800, 890)
+        node64.add_neighbor(node63, "UP")
+        node64.add_neighbor(node60, "LEFT")
+
         self.nodes = [
             node1,
             node2,
@@ -264,4 +336,25 @@ class Graph:
             node41,
             node42,
             node43,
+            node44,
+            node45,
+            node46,
+            node47,
+            node48,
+            node49,
+            node50,
+            node51,
+            node52,
+            node53,
+            node54,
+            node55,
+            node56,
+            node57,
+            node58,
+            node59,
+            node60,
+            node61,
+            node62,
+            node63,
+            node64,
         ]

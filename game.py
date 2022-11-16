@@ -26,7 +26,7 @@ class Game:
             self.pacman.draw()
             self.pacman.move()
 
-            pg.draw.circle(self.screen, WHITE, (475, 165), 20)
+            # pg.draw.circle(self.screen, WHITE, (475, 165), 20)
 
             pg.display.update()
 
