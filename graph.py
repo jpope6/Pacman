@@ -236,7 +236,6 @@ class Graph:
 
         node48 = Node(567.5, 530)
         node48.add_neighbor(node46, "UP")
-        node48.add_neighbor(node16, "LEFT")
 
         node49 = Node(567.5, 620)
         node49.add_neighbor(node48, "UP")
@@ -291,6 +290,10 @@ class Graph:
         node64 = Node(800, 890)
         node64.add_neighbor(node63, "UP")
         node64.add_neighbor(node60, "LEFT")
+
+        node65 = Node(427.5, 530)
+        node65.add_neighbor(node16, "LEFT")
+        node65.add_neighbor(node48, "RIGHT")
 
         # 2 nodes to teleport on either side of map
         self.node_left = Node(0, 435)
@@ -364,6 +367,7 @@ class Graph:
             node62,
             node63,
             node64,
+            node65,
             self.node_left,
             self.node_right,
         ]
