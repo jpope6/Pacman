@@ -55,7 +55,20 @@ class Pellets:
                     self.pellet_list.append(Pellet(x, y))
                     y += 30
 
+        # special case pellets
         self.pellet_list.append(Pellet(627.5, 435))
+        self.pellet_list.append(Pellet(50, 50))
+        self.pellet_list.append(Pellet(800, 50))
+        self.pellet_list.append(Pellet(50, 255))
+        self.pellet_list.append(Pellet(800, 255))
+        self.pellet_list.append(Pellet(287.5, 255))
+        self.pellet_list.append(Pellet(375, 255))
+        self.pellet_list.append(Pellet(475, 255))
+        self.pellet_list.append(Pellet(562.5, 255))
+        self.pellet_list.append(Pellet(375, 50))
+        self.pellet_list.append(Pellet(475, 50))
+        self.pellet_list.append(Pellet(287.5, 350))
+        self.pellet_list.append(Pellet(567.5, 350))
 
     def drawPellets(self):
         for pellet in self.pellet_list:
