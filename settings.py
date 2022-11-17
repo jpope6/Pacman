@@ -8,10 +8,10 @@ BLACK = (0, 0, 0)
 class Settings:
     def __init__(self):
         self.screen_width = 846
-        self.screen_height = 937
+        self.screen_height = 937 + 50
         self.maze = pg.transform.scale(
             pg.image.load("./assets/pacman_map.jpg"),
-            (self.screen_width, self.screen_height),
+            (self.screen_width, self.screen_height - 50),
         )
         self.pacman = None
 

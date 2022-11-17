@@ -14,6 +14,7 @@ class Pacman:
         self.direction = "STOP"
         self.target_direction = "STOP"
         self.onNode = True
+        self.radius = 20
 
     def move(self):
         self.change_direction()
@@ -65,4 +66,4 @@ class Pacman:
             self.node = self.graph.node_left
 
     def draw(self):
-        pg.draw.circle(self.screen, (255, 255, 0), (self.x, self.y), 20)
+        pg.draw.circle(self.screen, (255, 255, 0), (self.x, self.y), self.radius)

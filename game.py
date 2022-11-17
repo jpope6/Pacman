@@ -26,6 +26,7 @@ class Game:
 
             self.graph.draw()
             # self.graph.draw_edge()
+            self.pellets.pelletEaten(self.pacman)
             self.pellets.drawPellets()
             self.pacman.draw()
             self.pacman.move()
