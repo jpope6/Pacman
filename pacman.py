@@ -3,7 +3,7 @@ import pygame as pg
 
 class Pacman:
     def __init__(self, screen, graph):
-        self.node = 0
+        self.node = None
         self.screen = screen
         self.graph = graph
         self.node = self.graph.nodes[len(self.graph.nodes) - 3]

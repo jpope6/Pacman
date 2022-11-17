@@ -2,6 +2,7 @@ import pygame as pg
 import sys
 
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 
 class Settings:

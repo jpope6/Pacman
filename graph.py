@@ -25,7 +25,7 @@ class Node:
         neighbor.neighbors[other_direction] = self
 
     def draw(self, screen):
-        self.circle = pg.draw.rect(screen, WHITE, pg.Rect(self.x, self.y, 1, 1))
+        self.circle = pg.draw.rect(screen, BLACK, pg.Rect(self.x, self.y, 1, 1))
 
 
 class Graph:
@@ -236,6 +236,7 @@ class Graph:
 
         node48 = Node(567.5, 530)
         node48.add_neighbor(node46, "UP")
+        node48.add_neighbor(node16, "LEFT")
 
         node49 = Node(567.5, 620)
         node49.add_neighbor(node48, "UP")
@@ -291,9 +292,9 @@ class Graph:
         node64.add_neighbor(node63, "UP")
         node64.add_neighbor(node60, "LEFT")
 
-        node65 = Node(427.5, 530)
-        node65.add_neighbor(node16, "LEFT")
-        node65.add_neighbor(node48, "RIGHT")
+        node65 = Node(427.5, 710)
+        node65.add_neighbor(node25, "LEFT")
+        node65.add_neighbor(node54, "RIGHT")
 
         # 2 nodes to teleport on either side of map
         self.node_left = Node(0, 435)
