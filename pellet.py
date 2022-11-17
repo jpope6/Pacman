@@ -14,8 +14,9 @@ class Pellet:
 
 
 class Pellets:
-    def __init__(self, graph, screen):
+    def __init__(self, graph, screen, settings):
         self.graph = graph
+        self.settings = settings
         self.pellet_list = []
         self.node_x_done = []
         self.node_y_done = []
@@ -24,16 +25,15 @@ class Pellets:
         self.screen = screen
         self.addPelletToList()
 
-    def pelletEaten(self, pacman):
-        for pellet in self.pellet_list:
-            if (
-                pellet.x > pacman.x - pacman.radius
-                and pellet.x < pacman.x + pacman.radius
-            ) and (
-                pellet.y > pacman.y - pacman.radius
-                and pellet.y < pacman.y + pacman.radius
-            ):
-                self.pellet_list.remove(pellet)
+    def pelletEaten(self, pacman, pellet):
+        if (
+            pellet.x > pacman.x - pacman.radius and pellet.x < pacman.x + pacman.radius
+        ) and (
+            pellet.y > pacman.y - pacman.radius and pellet.y < pacman.y + pacman.radius
+        ):
+            self.pellet_list.remove(pellet)
+            self.settings.score += pellet.points
+            self.settings.prep_score()
 
     def addPelletToList(self):
         for node in self.graph.nodes:
@@ -113,7 +113,7 @@ class Pellets:
         self.pellet_list.append(Pellet(800, 890))
         self.pellet_list.append(Pellet(800, 800))
 
-    def drawPellets(self):
+    def drawPellets(self, pacman):
         for pellet in self.pellet_list:
             if (
                 pellet.x == 650
@@ -124,3 +124,4 @@ class Pellets:
                 self.pellet_list.remove(pellet)
 
             pellet.draw(self.screen)
+            self.pelletEaten(pacman, pellet)

@@ -17,19 +17,20 @@ class Game:
         self.pacman = Pacman(self.screen, self.graph)
         self.settings.pacman = self.pacman
 
-        self.pellets = Pellets(self.graph, self.screen)
+        self.pellets = Pellets(self.graph, self.screen, self.settings)
 
     def play(self):
         while True:
+            self.screen.fill(BLACK)
             self.settings.check_events()
             pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
 
             self.graph.draw()
             # self.graph.draw_edge()
-            self.pellets.pelletEaten(self.pacman)
-            self.pellets.drawPellets()
+            self.pellets.drawPellets(self.pacman)
             self.pacman.draw()
             self.pacman.move()
+            self.settings.draw(self.screen)
 
             # pg.draw.circle(self.screen, WHITE, (475, 165), 20)
 

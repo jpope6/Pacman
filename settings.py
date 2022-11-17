@@ -14,6 +14,9 @@ class Settings:
             (self.screen_width, self.screen_height - 50),
         )
         self.pacman = None
+        self.score = 0
+        self.font = pg.font.SysFont(None, 48)
+        self.prep_score()
 
     def check_events(self):
         for event in pg.event.get():
@@ -28,3 +31,15 @@ class Settings:
                     self.pacman.target_direction = "LEFT"
                 elif event.key == pg.K_RIGHT:
                     self.pacman.target_direction = "RIGHT"
+
+    def prep_score(self):
+        score_str = "Score: " + str(self.score)
+        self.score_image = self.font.render(score_str, True, WHITE, BLACK)
+
+        # Display the score at the top right of the screen.
+        self.score_rect = self.score_image.get_rect()
+        self.score_rect.left = 10
+        self.score_rect.top = self.screen_height - 40
+
+    def draw(self, screen):
+        screen.blit(self.score_image, self.score_rect)
