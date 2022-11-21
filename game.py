@@ -3,6 +3,7 @@ from settings import *
 from graph import Graph
 from pacman import Pacman
 from pellet import *
+from ghost import *
 
 
 class Game:
@@ -19,6 +20,8 @@ class Game:
 
         self.pellets = Pellets(self.graph, self.screen, self.settings)
 
+        self.blinky = Blinky(self.screen, self.graph)
+
     def play(self):
         while True:
             self.screen.fill(BLACK)
@@ -29,6 +32,7 @@ class Game:
             # self.graph.draw_edge()
             self.pellets.drawPellets(self.pacman)
             self.pacman.draw()
+            self.blinky.draw()
             self.pacman.move()
             self.settings.draw(self.screen)
 

@@ -7,7 +7,7 @@ class Pacman:
         self.node = None
         self.screen = screen
         self.graph = graph
-        self.node = self.graph.nodes[len(self.graph.nodes) - 3]
+        self.node = self.graph.nodes[len(self.graph.nodes) - 4]
         self.target = None
         self.x = self.node.x
         self.y = self.node.y
