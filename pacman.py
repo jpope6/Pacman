@@ -19,6 +19,7 @@ class Pacman:
         self.spritesheet = Spritesheet("./assets/images/pacman-spritesheet.png")
         self.images = {"LEFT": None, "RIGHT": None, "DOWN": None, "UP": None}
         self.setImages()
+        self.image = self.left_timer.image()
 
     def setImages(self):
         self.images["LEFT"] = self.spritesheet.images_at(
@@ -89,20 +90,18 @@ class Pacman:
             self.node = self.graph.node_left
 
     def draw(self):
-        image = self.left_timer.image()
-
         if self.direction == "LEFT":
-            image = self.left_timer.image()
+            self.image = self.left_timer.image()
         if self.direction == "RIGHT":
-            image = self.right_timer.image()
+            self.image = self.right_timer.image()
         if self.direction == "DOWN":
-            image = self.down_timer.image()
+            self.image = self.down_timer.image()
         if self.direction == "UP":
-            image = self.up_timer.image()
+            self.image = self.up_timer.image()
 
-        rect = image.get_rect()
+        rect = self.image.get_rect()
         rect.left = self.x - 16
         rect.top = self.y - 16
-        self.screen.blit(image, rect)
+        self.screen.blit(self.image, rect)
 
         # pg.draw.circle(self.screen, (255, 255, 0), (self.x, self.y), self.radius)
