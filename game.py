@@ -20,7 +20,9 @@ class Game:
 
         self.pellets = Pellets(self.graph, self.screen, self.settings)
 
-        self.blinky = Blinky(self.screen, self.graph)
+        self.blinky = Blinky(self.screen, self.graph, self.pacman)
+        self.pinky = Pinky(self.screen, self.graph, self.settings)
+        self.inkey = Inkey(self.screen, self.graph, self.settings)
 
     def play(self):
         while True:
@@ -32,8 +34,14 @@ class Game:
             # self.graph.draw_edge()
             self.pellets.drawPellets(self.pacman)
             self.pacman.draw()
-            self.blinky.draw()
+            # self.blinky.draw()
+            self.pinky.draw()
+            self.inkey.draw()
             self.pacman.move()
+            self.pinky.moveAround()
+            self.pinky.move()
+            self.inkey.moveAround()
+            self.inkey.move()
             self.settings.draw(self.screen)
 
             # pg.draw.circle(self.screen, WHITE, (475, 165), 20)

@@ -77,6 +77,9 @@ class Graph:
         for edge in edges:
             self.add_edge(edge[0], edge[1])
 
+    def get_neighbors(self, node):
+        return node.neighbors
+
     def draw(self):
         for node in self.nodes:
             node.draw(self.screen)
