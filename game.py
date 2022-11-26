@@ -23,6 +23,11 @@ class Game:
         self.blinky = Blinky(self.screen, self.graph, self.pacman)
         self.pinky = Pinky(self.screen, self.graph, self.settings)
         self.inkey = Inkey(self.screen, self.graph, self.settings)
+        self.clyde = Clyde(self.screen, self.graph, self.settings)
+
+        self.settings.ghosts = [self.blinky, self.pinky, self.inkey, self.clyde]
+
+        self.settings.frame_count = 0
 
     def play(self):
         while True:
@@ -35,17 +40,23 @@ class Game:
             self.pellets.drawPellets(self.pacman)
             self.pacman.draw()
             # self.blinky.draw()
-            self.pinky.draw()
-            self.inkey.draw()
+            self.pinky.draw(self.settings.frame_count)
+            self.inkey.draw(self.settings.frame_count)
+            self.clyde.draw(self.settings.frame_count)
             self.pacman.move()
+            # self.blinky.moveAround()
+            # self.blinky.move()
             self.pinky.moveAround()
             self.pinky.move()
             self.inkey.moveAround()
             self.inkey.move()
+            self.clyde.moveAround()
+            self.clyde.move()
             self.settings.draw(self.screen)
 
             # pg.draw.circle(self.screen, WHITE, (475, 165), 20)
 
+            self.settings.frame_count += 1
             pg.display.update()
 
 

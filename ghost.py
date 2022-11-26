@@ -1,5 +1,6 @@
 import pygame as pg
 from timer import *
+from threading import Timer as Clock
 
 
 class Ghost:
@@ -12,10 +13,23 @@ class Ghost:
         self.node = None
         self.direction = "STOP"
         self.move_speed = 0.5
-        self.images = {"LEFT": None, "RIGHT": None, "DOWN": None, "UP": None}
         self.spritesheet = Spritesheet("./assets/images/pacman-spritesheet.png")
+        self.images = {"LEFT": None, "RIGHT": None, "DOWN": None, "UP": None}
+        self.dying_images = self.spritesheet.images_at(
+            [(161, 65, 30, 30), (161, 97, 30, 30)]
+        )
+        self.timer = Timer(self.dying_images)
         self.settings = settings
         self.spawn = False
+        self.dying = False
+        self.dying_time = 0
+        self.dead = False
+
+    def dyingModeTimer(self, time):
+        self.image = self.timer.image()
+
+        if self.dying_time + 3000 == time:
+            self.dying = False
 
     def update_node(self):
         for node in self.graph.nodes:
@@ -51,13 +65,20 @@ class Blinky(Ghost):
     def __init__(self, screen, graph, pacman):
         super().__init__(screen, graph, pacman)
         self.node = self.graph.nodes[len(self.graph.nodes) - 3]
-        self.x = 335
-        self.y = 435
+        self.x = self.node.x
+        self.y = self.node.y
         self.pacman = pacman
         self.goal = self.pacman.target
 
-    def moveToPacman(self):
-        pass
+    def moveAround(self):
+        if self.pacman.y < self.y and self.onNode and self.node.neighbors["UP"]:
+            self.direction = "UP"
+        elif self.pacman.x < self.x and self.onNode and self.node.neighbors["RIGHT"]:
+            self.direction = "RIGHT"
+        elif self.pacman.y > self.y and self.onNode and self.node.neighbors["DOWN"]:
+            self.direction = "DOWN"
+        elif self.pacman.x > self.x and self.onNode and self.node.neighbors["LEFT"]:
+            self.direction = "LEFT"
 
     def draw(self):
         pg.draw.rect(
@@ -182,14 +203,16 @@ class Pinky(Ghost):
         if (self.x, self.y) == (200, 255):
             self.direction = "DOWN"
 
-    def draw(self):
-        if self.direction == "LEFT":
+    def draw(self, time):
+        if self.dying:
+            self.dyingModeTimer(time)
+        elif self.direction == "LEFT":
             self.image = self.images["LEFT"]
-        if self.direction == "RIGHT":
+        elif self.direction == "RIGHT":
             self.image = self.images["RIGHT"]
-        if self.direction == "DOWN":
+        elif self.direction == "DOWN":
             self.image = self.images["DOWN"]
-        if self.direction == "UP":
+        elif self.direction == "UP":
             self.image = self.images["UP"]
 
         rect = self.image.get_rect()
@@ -222,14 +245,16 @@ class Inkey(Ghost):
         self.images["DOWN"] = self.spritesheet.image_at((65, 97, 32, 32))
         self.images["UP"] = self.spritesheet.image_at((65, 65, 32, 32))
 
-    def draw(self):
-        if self.direction == "LEFT":
+    def draw(self, time):
+        if self.dying:
+            self.dyingModeTimer(time)
+        elif self.direction == "LEFT":
             self.image = self.images["LEFT"]
-        if self.direction == "RIGHT":
+        elif self.direction == "RIGHT":
             self.image = self.images["RIGHT"]
-        if self.direction == "DOWN":
+        elif self.direction == "DOWN":
             self.image = self.images["DOWN"]
-        if self.direction == "UP":
+        elif self.direction == "UP":
             self.image = self.images["UP"]
 
         rect = self.image.get_rect()
@@ -323,3 +348,31 @@ class Inkey(Ghost):
 
         if (self.x, self.y) == (650, 255):
             self.direction = "DOWN"
+
+
+class Clyde(Inkey):
+    def __init__(self, screen, graph, settings):
+        super().__init__(screen, graph, settings)
+        self.x = 485
+        self.image = self.images["RIGHT"]
+
+    def setImages(self):
+        self.images["LEFT"] = self.spritesheet.image_at((97, 129, 32, 32))
+        self.images["RIGHT"] = self.spritesheet.image_at((97, 161, 32, 32))
+        self.images["DOWN"] = self.spritesheet.image_at((97, 97, 32, 32))
+        self.images["UP"] = self.spritesheet.image_at((97, 65, 32, 32))
+
+    def spawnToNode(self):
+        if self.settings.score >= 10 and self.spawn == False:
+            if self.y > 420:
+                self.direction = "UP"
+                self.y -= self.move_speed
+            elif self.x > 425:
+                self.direction = "LEFT"
+                self.x -= self.move_speed
+            elif self.x == 425 and self.y > 350:
+                self.direction = "UP"
+                self.y -= self.move_speed
+
+                if self.x == self.node.x and self.y == self.node.y:
+                    self.spawn = True
