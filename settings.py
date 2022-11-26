@@ -6,7 +6,8 @@ BLACK = (0, 0, 0)
 
 
 class Settings:
-    def __init__(self):
+    def __init__(self, game):
+        self.game = game
         self.screen_width = 846
         self.screen_height = 937 + 50
         self.maze = pg.transform.scale(
@@ -22,6 +23,20 @@ class Settings:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                if self.game.menu.PLAY_BUTTON.checkForInput(
+                    self.game.menu.menu_mouse_pos
+                ):
+                    self.game.cur_menu = "game"
+
+                if self.game.menu.HS_BUTTON.checkForInput(
+                    self.game.menu.menu_mouse_pos
+                ):
+                    self.game.cur_menu = "hs"
+                if self.game.menu.BACK_BUTTON.checkForInput(
+                    self.game.menu.menu_mouse_pos
+                ):
+                    self.game.cur_menu = "menu"
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_UP:
                     self.pacman.target_direction = "UP"

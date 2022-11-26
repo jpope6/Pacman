@@ -4,15 +4,17 @@ from graph import Graph
 from pacman import Pacman
 from pellet import *
 from ghost import *
+from menu import *
 
 
 class Game:
     def __init__(self):
         pg.init()
-        self.settings = Settings()
+        self.settings = Settings(self)
         self.size = self.settings.screen_width, self.settings.screen_height
         self.screen = pg.display.set_mode(size=self.size)
         pg.display.set_caption("Pacman")
+        self.cur_menu = "menu"
 
         self.graph = Graph(self.screen)
         self.pacman = Pacman(self.screen, self.graph)
@@ -27,34 +29,43 @@ class Game:
 
         self.settings.ghosts = [self.blinky, self.pinky, self.inkey, self.clyde]
 
+        self.menu = Menu(self)
+
         self.settings.frame_count = 0
 
     def play(self):
         while True:
             self.screen.fill(BLACK)
             self.settings.check_events()
-            pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
+            if self.cur_menu == "menu":
+                self.menu.menu()
 
-            self.graph.draw()
-            # self.graph.draw_edge()
-            self.pellets.drawPellets(self.pacman)
-            self.pacman.draw()
-            # self.blinky.draw()
-            self.pinky.draw(self.settings.frame_count)
-            self.inkey.draw(self.settings.frame_count)
-            self.clyde.draw(self.settings.frame_count)
-            self.pacman.move()
-            # self.blinky.moveAround()
-            # self.blinky.move()
-            self.pinky.moveAround()
-            self.pinky.move()
-            self.inkey.moveAround()
-            self.inkey.move()
-            self.clyde.moveAround()
-            self.clyde.move()
-            self.settings.draw(self.screen)
+            if self.cur_menu == "hs":
+                self.menu.highscores()
 
-            # pg.draw.circle(self.screen, WHITE, (475, 165), 20)
+            if self.cur_menu == "game":
+                pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
+
+                self.graph.draw()
+                # self.graph.draw_edge()
+                self.pellets.drawPellets(self.pacman)
+                self.pacman.draw()
+                # self.blinky.draw()
+                self.pinky.draw(self.settings.frame_count)
+                self.inkey.draw(self.settings.frame_count)
+                self.clyde.draw(self.settings.frame_count)
+                self.pacman.move()
+                # self.blinky.moveAround()
+                # self.blinky.move()
+                self.pinky.moveAround()
+                self.pinky.move()
+                self.inkey.moveAround()
+                self.inkey.move()
+                self.clyde.moveAround()
+                self.clyde.move()
+                self.settings.draw(self.screen)
+
+                # pg.draw.circle(self.screen, WHITE, (475, 165), 20)
 
             self.settings.frame_count += 1
             pg.display.update()
