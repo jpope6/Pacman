@@ -26,10 +26,16 @@ class Ghost:
         self.dead = False
 
     def dyingModeTimer(self, time):
-        self.image = self.timer.image()
+        if self.dying_time + 2200 > time:
+            self.image = self.dying_images[0]
+        # self.move_speed = 0.25
+
+        if self.dying_time + 2200 <= time and self.dying_time + 3000 > time:
+            self.image = self.timer.image()
 
         if self.dying_time + 3000 == time:
             self.dying = False
+            # self.move_speed = 0.5
 
     def update_node(self):
         for node in self.graph.nodes:
