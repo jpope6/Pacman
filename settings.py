@@ -20,6 +20,7 @@ class Settings:
         self.font = pg.font.SysFont(None, 48)
         self.prep_score()
         self.sounds = Sound()
+        self.sound_playing = False
 
     def check_events(self):
         for event in pg.event.get():

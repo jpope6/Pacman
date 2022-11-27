@@ -33,6 +33,7 @@ class Game:
         self.settings.pellets = self.pellets
 
         self.menu = Menu(self)
+        self.playable = False
 
         self.settings.frame_count = 0
 
@@ -47,6 +48,15 @@ class Game:
                 self.menu.highscores()
 
             if self.cur_menu == "game":
+                cur_frame = 0
+                if not self.settings.sound_playing:
+                    self.settings.sounds.play_startup()
+                    cur_frame = self.settings.frame_count
+                    self.settings.sound_playing = True
+
+                if cur_frame + 2100 == self.settings.frame_count:
+                    self.playable = True
+
                 pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
 
                 self.graph.draw()
@@ -56,16 +66,19 @@ class Game:
                 self.pinky.draw(self.settings.frame_count)
                 self.inkey.draw(self.settings.frame_count)
                 self.clyde.draw(self.settings.frame_count)
-                self.pacman.move()
-                # self.blinky.moveAround()
-                # self.blinky.move()
-                self.pinky.moveAround()
-                self.pinky.move()
-                self.inkey.moveAround()
-                self.inkey.move()
-                self.clyde.moveAround()
-                self.clyde.move()
-                self.portals.drawPortal(self.screen, self.settings.frame_count)
+
+                if self.playable:
+                    self.pacman.move()
+                    # self.blinky.moveAround()
+                    # self.blinky.move()
+                    self.pinky.moveAround()
+                    self.pinky.move()
+                    self.inkey.moveAround()
+                    self.inkey.move()
+                    self.clyde.moveAround()
+                    self.clyde.move()
+                    self.portals.drawPortal(self.screen, self.settings.frame_count)
+
                 self.pacman.draw()
                 self.settings.draw(self.screen)
 
