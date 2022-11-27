@@ -141,7 +141,7 @@ class Pacman:
         # pg.draw.circle(self.screen, (255, 255, 0), (self.x, self.y), self.radius)
 
     def drawLives(self):
-        if self.lives > 2:
+        if self.lives > 0:
             image = self.images["LEFT"][0]
             rect = image.get_rect()
             rect.left = self.lives_x
@@ -155,7 +155,7 @@ class Pacman:
             rect2.top = 947
             self.screen.blit(image2, rect2)
 
-        if self.lives > 0:
+        if self.lives > 2:
             image3 = self.images["LEFT"][0]
             rect3 = image3.get_rect()
             rect3.left = self.lives_x - 64
