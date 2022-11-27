@@ -36,6 +36,7 @@ class Ghost:
         if self.dying_time + 3000 == time:
             self.dying = False
             self.move_speed = 0.5
+            self.settings.pellets.dyingSound = False
 
     def update_node(self):
         for node in self.graph.nodes:

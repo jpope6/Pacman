@@ -26,6 +26,7 @@ class Pellets:
         self.bigPelletList = [(50, 108), (800, 108), (50, 710), (800, 710)]
         self.screen = screen
         self.addPelletToList()
+        self.dyingSound = False
 
     def pelletEaten(self, pacman, pellet):
         if (
@@ -34,13 +35,18 @@ class Pellets:
             pellet.y > pacman.y - pacman.radius and pellet.y < pacman.y + pacman.radius
         ):
             if (pellet.x, pellet.y) in self.bigPelletList:
+                self.settings.sounds.play_power_up()
+                self.dyingSound = True
                 for ghost in self.settings.ghosts:
                     ghost.dying = True
                     ghost.dying_time = self.settings.frame_count
+
             self.pellet_list.remove(pellet)
             self.settings.score += pellet.points
             self.settings.prep_score()
-            self.settings.sounds.play_waka()
+
+            if not self.dyingSound:
+                self.settings.sounds.play_waka()
 
     def addPelletToList(self):
         for node in self.graph.nodes:

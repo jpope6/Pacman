@@ -30,6 +30,7 @@ class Game:
         self.clyde = Clyde(self.screen, self.graph, self.settings)
 
         self.settings.ghosts = [self.blinky, self.pinky, self.inkey, self.clyde]
+        self.settings.pellets = self.pellets
 
         self.menu = Menu(self)
 
