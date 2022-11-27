@@ -3,10 +3,11 @@ from timer import *
 
 
 class Pacman:
-    def __init__(self, screen, graph):
+    def __init__(self, screen, graph, settings):
         self.node = None
         self.screen = screen
         self.graph = graph
+        self.settings = settings
         self.node = self.graph.nodes[len(self.graph.nodes) - 4]
         self.target = None
         self.x = self.node.x
@@ -19,7 +20,31 @@ class Pacman:
         self.spritesheet = Spritesheet("./assets/images/pacman-spritesheet.png")
         self.images = {"LEFT": None, "RIGHT": None, "DOWN": None, "UP": None}
         self.setImages()
+        self.deadImages = []
+        self.setDeadImages()
+        self.dead_timer = Timer(self.deadImages, is_loop=False)
         self.image = self.left_timer.image()
+        self.dead = False
+        self.lives = 3
+        self.lives_x = 780
+        self.score_from_death = 0
+
+    def setDeadImages(self):
+        self.deadImages = self.spritesheet.images_at(
+            [
+                (0, 193, 32, 32),
+                (33, 193, 32, 32),
+                (65, 193, 32, 32),
+                (97, 193, 32, 32),
+                (129, 193, 32, 32),
+                (161, 193, 32, 32),
+                (193, 193, 32, 32),
+                (225, 193, 32, 32),
+                (257, 193, 32, 32),
+                (289, 193, 32, 32),
+                (321, 193, 32, 32),
+            ]
+        )
 
     def setImages(self):
         self.images["LEFT"] = self.spritesheet.images_at(
@@ -94,13 +119,18 @@ class Pacman:
             self.node = self.graph.node_left
 
     def draw(self):
-        if self.direction == "LEFT":
+        if self.dead:
+            self.image = self.dead_timer.image()
+            self.direction = "STOP"
+            if self.dead_timer.is_expired():
+                self.reset()
+        elif self.direction == "LEFT":
             self.image = self.left_timer.image()
-        if self.direction == "RIGHT":
+        elif self.direction == "RIGHT":
             self.image = self.right_timer.image()
-        if self.direction == "DOWN":
+        elif self.direction == "DOWN":
             self.image = self.down_timer.image()
-        if self.direction == "UP":
+        elif self.direction == "UP":
             self.image = self.up_timer.image()
 
         rect = self.image.get_rect()
@@ -109,3 +139,42 @@ class Pacman:
         self.screen.blit(self.image, rect)
 
         # pg.draw.circle(self.screen, (255, 255, 0), (self.x, self.y), self.radius)
+
+    def drawLives(self):
+        if self.lives > 2:
+            image = self.images["LEFT"][0]
+            rect = image.get_rect()
+            rect.left = self.lives_x
+            rect.top = 947
+            self.screen.blit(image, rect)
+
+        if self.lives > 1:
+            image2 = self.images["LEFT"][0]
+            rect2 = image2.get_rect()
+            rect2.left = self.lives_x - 32
+            rect2.top = 947
+            self.screen.blit(image2, rect2)
+
+        if self.lives > 0:
+            image3 = self.images["LEFT"][0]
+            rect3 = image3.get_rect()
+            rect3.left = self.lives_x - 64
+            rect3.top = 947
+            self.screen.blit(image3, rect3)
+
+    def reset(self):
+        if self.lives > 0:
+            self.lives -= 1
+            self.node = self.graph.nodes[len(self.graph.nodes) - 4]
+            self.target = None
+            self.x = self.node.x
+            self.y = self.node.y
+            self.direction = "STOP"
+            self.target_direction = "STOP"
+            self.onNode = True
+            self.image = self.left_timer.image()
+            self.dead = False
+            self.score_from_death = 0
+
+            for ghost in self.settings.ghosts:
+                ghost.reset()

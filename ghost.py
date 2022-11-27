@@ -1,6 +1,5 @@
 import pygame as pg
 from timer import *
-from threading import Timer as Clock
 
 
 class Ghost:
@@ -19,27 +18,41 @@ class Ghost:
             [(161, 65, 30, 30), (161, 97, 30, 30)]
         )
         self.timer = Timer(self.dying_images)
+        self.dead_images = {"LEFT": None, "RIGHT": None, "DOWN": None, "UP": None}
+        self.setDeadImages()
         self.settings = settings
         self.pacman = pacman
         self.spawn = False
         self.dying = False
         self.dying_time = 0
         self.dead = False
+        self.scores = [200, 400, 800, 1600]
+        self.font = pg.font.Font(f"./assets/fonts/PressStart2P-Regular.ttf", 15)
+        self.multiplied = False
+        self.settings.index = 0
+        self.score_checked = False
+        self.score = "0"
+        self.scoreFromDeath = 0
+
+    def setDeadImages(self):
+        self.dead_images["LEFT"] = self.spritesheet.image_at((129, 129, 32, 32))
+        self.dead_images["RIGHT"] = self.spritesheet.image_at((129, 161, 32, 32))
+        self.dead_images["DOWN"] = self.spritesheet.image_at((129, 97, 32, 32))
+        self.dead_images["UP"] = self.spritesheet.image_at((129, 65, 32, 32))
 
     def dyingAndEaten(self):
         if (
-            (
-                self.x > self.pacman.x - self.pacman.radius
-                and self.x < self.pacman.x + self.pacman.radius
-            )
-            and (
-                self.y > self.pacman.y - self.pacman.radius
-                and self.y < self.pacman.y + self.pacman.radius
-            )
-            and self.dying
+            self.x > self.pacman.x - self.pacman.radius
+            and self.x < self.pacman.x + self.pacman.radius
+        ) and (
+            self.y > self.pacman.y - self.pacman.radius
+            and self.y < self.pacman.y + self.pacman.radius
         ):
-            self.dead = True
-            self.move_speed = 0
+            if self.dying and not self.dead:
+                self.move_speed = 0
+                self.dead = True
+            if not self.dying:
+                self.pacman.dead = True
 
     def dyingModeTimer(self, time):
         if self.dying_time + 2200 > time:
@@ -61,6 +74,7 @@ class Ghost:
             else:
                 self.move_speed = 0.5
 
+            self.score = 200
             self.settings.pellets.dyingSound = False
 
     def update_node(self):
@@ -92,6 +106,27 @@ class Ghost:
         if self.direction == "RIGHT" and self.node.neighbors["RIGHT"] is not None:
             self.x += self.move_speed * 1
             self.target = self.node.neighbors["RIGHT"]
+
+    def incrementScore(self):
+        if self.dying and self.dead and not self.multiplied:
+            self.settings.score += self.scores[self.settings.index]
+            self.settings.index += 1
+            self.multiplied = True
+        if not self.dying:
+            self.settings.index = 0
+            self.multiplied = False
+            self.score_checked = False
+
+    def drawDead(self):
+        if not self.score_checked:
+            self.score = str(self.scores[self.settings.index])
+            self.score_checked = True
+
+        text = self.font.render(self.score, True, (255, 255, 255))
+        text_rec = text.get_rect(center=(self.x, self.y))
+        self.image = self.dead_images[self.direction]
+        self.screen.blit(text, text_rec)
+        self.incrementScore()
 
 
 class Blinky(Ghost):
@@ -134,7 +169,7 @@ class Pinky(Ghost):
         self.images["UP"] = self.spritesheet.image_at((33, 65, 32, 32))
 
     def spawnToNode(self):
-        if self.settings.score >= 100 and self.spawn == False:
+        if self.pacman.score_from_death >= 100 and self.spawn == False:
             if self.y > 420:
                 self.direction = "UP"
                 self.y -= self.move_speed
@@ -147,6 +182,14 @@ class Pinky(Ghost):
 
                 if self.x == self.node.x and self.y == self.node.y:
                     self.spawn = True
+
+    def reset(self):
+        self.node = self.graph.nodes[len(self.graph.nodes) - 3]
+        self.x = 365
+        self.y = 460
+        self.image = self.images["LEFT"]
+        self.spawn = False
+        self.direction = "STOP"
 
     def moveAround(self):
         self.spawnToNode()
@@ -236,7 +279,7 @@ class Pinky(Ghost):
             self.direction = "DOWN"
 
     def draw(self, time):
-        if self.dying:
+        if self.dying and not self.dead:
             self.dyingModeTimer(time)
         elif self.direction == "LEFT":
             self.image = self.images["LEFT"]
@@ -263,7 +306,7 @@ class Inkey(Ghost):
         self.image = self.images["UP"]
 
     def spawnToNode(self):
-        if self.settings.score >= 50 and self.spawn == False:
+        if self.pacman.score_from_death >= 50 and self.spawn == False:
             if self.y > self.node.y:
                 self.direction = "UP"
                 self.y -= self.move_speed
@@ -293,6 +336,14 @@ class Inkey(Ghost):
         rect.left = self.x - 16
         rect.top = self.y - 16
         self.screen.blit(self.image, rect)
+
+    def reset(self):
+        self.node = self.graph.nodes[len(self.graph.nodes) - 3]
+        self.x = 425
+        self.y = 460
+        self.image = self.images["UP"]
+        self.spawn = False
+        self.direction = "STOP"
 
     def moveAround(self):
         self.spawnToNode()
@@ -395,7 +446,7 @@ class Clyde(Inkey):
         self.images["UP"] = self.spritesheet.image_at((97, 65, 32, 32))
 
     def spawnToNode(self):
-        if self.settings.score >= 10 and self.spawn == False:
+        if self.pacman.score_from_death >= 10 and self.spawn == False:
             if self.y > 420:
                 self.direction = "UP"
                 self.y -= self.move_speed
@@ -408,3 +459,11 @@ class Clyde(Inkey):
 
                 if self.x == self.node.x and self.y == self.node.y:
                     self.spawn = True
+
+    def reset(self):
+        self.node = self.graph.nodes[len(self.graph.nodes) - 3]
+        self.x = 485
+        self.y = 460
+        self.image = self.images["RIGHT"]
+        self.spawn = False
+        self.direction = "STOP"

@@ -17,7 +17,7 @@ class Settings:
         )
         self.pacman = None
         self.score = 0
-        self.font = pg.font.SysFont(None, 48)
+        self.font = pg.font.Font(f"./assets/fonts/PressStart2P-Regular.ttf", 30)
         self.prep_score()
         self.sounds = Sound()
         self.sound_playing = False
@@ -55,7 +55,7 @@ class Settings:
                     self.game.portals.createPortal2()
 
     def prep_score(self):
-        score_str = "Score: " + str(self.score)
+        score_str = "Score:" + str(self.score)
         self.score_image = self.font.render(score_str, True, WHITE, BLACK)
 
         # Display the score at the top right of the screen.

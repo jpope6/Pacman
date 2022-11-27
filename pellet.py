@@ -43,6 +43,7 @@ class Pellets:
 
             self.pellet_list.remove(pellet)
             self.settings.score += pellet.points
+            pacman.score_from_death += pellet.points
             self.settings.prep_score()
 
             if not self.dyingSound:

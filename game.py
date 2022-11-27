@@ -18,7 +18,7 @@ class Game:
         self.cur_menu = "menu"
 
         self.graph = Graph(self.screen)
-        self.pacman = Pacman(self.screen, self.graph)
+        self.pacman = Pacman(self.screen, self.graph, self.settings)
         self.settings.pacman = self.pacman
         self.portals = Portal(self.pacman)
 
@@ -29,7 +29,7 @@ class Game:
         self.inkey = Inkey(self.screen, self.graph, self.settings, self.pacman)
         self.clyde = Clyde(self.screen, self.graph, self.settings, self.pacman)
 
-        self.settings.ghosts = [self.blinky, self.pinky, self.inkey, self.clyde]
+        self.settings.ghosts = [self.pinky, self.inkey, self.clyde]
         self.settings.pellets = self.pellets
 
         self.menu = Menu(self)
@@ -54,7 +54,7 @@ class Game:
                     cur_frame = self.settings.frame_count
                     self.settings.sound_playing = True
 
-                if cur_frame + 2100 == self.settings.frame_count:
+                if cur_frame + 2000 == self.settings.frame_count:
                     self.playable = True
 
                 pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
@@ -62,10 +62,18 @@ class Game:
                 self.graph.draw()
                 # self.graph.draw_edge()
                 self.pellets.drawPellets(self.pacman)
+
                 # self.blinky.draw()
-                self.pinky.draw(self.settings.frame_count)
-                self.inkey.draw(self.settings.frame_count)
-                self.clyde.draw(self.settings.frame_count)
+                # self.pinky.draw(self.settings.frame_count)
+                # self.inkey.draw(self.settings.frame_count)
+                # self.clyde.draw(self.settings.frame_count)
+
+                for ghost in self.settings.ghosts:
+                    if ghost.dead:
+                        ghost.drawDead()
+                    else:
+                        ghost.incrementScore()
+                        ghost.draw(self.settings.frame_count)
 
                 if self.playable:
                     self.pacman.move()
@@ -80,6 +88,7 @@ class Game:
                     self.portals.drawPortal(self.screen, self.settings.frame_count)
 
                 self.pacman.draw()
+                self.pacman.drawLives()
                 self.settings.draw(self.screen)
 
                 # pg.draw.circle(self.screen, WHITE, (475, 165), 20)
