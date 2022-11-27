@@ -47,15 +47,19 @@ class Pacman:
 
         if self.direction == "UP" and self.node.neighbors["UP"] is not None:
             self.y += self.move_speed * -1
+            self.x = self.node.x
             self.target = self.node.neighbors["UP"]
         if self.direction == "DOWN" and self.node.neighbors["DOWN"] is not None:
             self.y += self.move_speed * 1
+            self.x = self.node.x
             self.target = self.node.neighbors["DOWN"]
         if self.direction == "LEFT" and self.node.neighbors["LEFT"] is not None:
             self.x += self.move_speed * -1
+            self.y = self.node.y
             self.target = self.node.neighbors["LEFT"]
         if self.direction == "RIGHT" and self.node.neighbors["RIGHT"] is not None:
             self.x += self.move_speed * 1
+            self.y = self.node.y
             self.target = self.node.neighbors["RIGHT"]
 
         # print(self.x, ", ", self.y)

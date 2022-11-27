@@ -5,6 +5,7 @@ from pacman import Pacman
 from pellet import *
 from ghost import *
 from menu import *
+from portal import Portal
 
 
 class Game:
@@ -19,6 +20,7 @@ class Game:
         self.graph = Graph(self.screen)
         self.pacman = Pacman(self.screen, self.graph)
         self.settings.pacman = self.pacman
+        self.portals = Portal(self.pacman)
 
         self.pellets = Pellets(self.graph, self.screen, self.settings)
 
@@ -49,7 +51,6 @@ class Game:
                 self.graph.draw()
                 # self.graph.draw_edge()
                 self.pellets.drawPellets(self.pacman)
-                self.pacman.draw()
                 # self.blinky.draw()
                 self.pinky.draw(self.settings.frame_count)
                 self.inkey.draw(self.settings.frame_count)
@@ -63,6 +64,8 @@ class Game:
                 self.inkey.move()
                 self.clyde.moveAround()
                 self.clyde.move()
+                self.portals.drawPortal(self.screen, self.settings.frame_count)
+                self.pacman.draw()
                 self.settings.draw(self.screen)
 
                 # pg.draw.circle(self.screen, WHITE, (475, 165), 20)

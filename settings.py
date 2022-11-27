@@ -46,6 +46,10 @@ class Settings:
                     self.pacman.target_direction = "LEFT"
                 elif event.key == pg.K_RIGHT:
                     self.pacman.target_direction = "RIGHT"
+                elif event.key == pg.K_z:
+                    self.game.portals.createPortal1()
+                elif event.key == pg.K_x:
+                    self.game.portals.createPortal2()
 
     def prep_score(self):
         score_str = "Score: " + str(self.score)

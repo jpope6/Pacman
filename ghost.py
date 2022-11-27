@@ -28,14 +28,14 @@ class Ghost:
     def dyingModeTimer(self, time):
         if self.dying_time + 2200 > time:
             self.image = self.dying_images[0]
-        # self.move_speed = 0.25
+            self.move_speed = 0.25
 
         if self.dying_time + 2200 <= time and self.dying_time + 3000 > time:
             self.image = self.timer.image()
 
         if self.dying_time + 3000 == time:
             self.dying = False
-            # self.move_speed = 0.5
+            self.move_speed = 0.5
 
     def update_node(self):
         for node in self.graph.nodes:
@@ -128,10 +128,10 @@ class Pinky(Ghost):
         if (self.x, self.y) == (425, 350):
             self.direction = "LEFT"
 
-        if (self.x, self.y) == (287.5, 350):
+        if (self.x, self.y) == (287, 350):
             self.direction = "DOWN"
 
-        if (self.x, self.y) == (287.5, 435):
+        if (self.x, self.y) == (287, 435):
             self.direction = "LEFT"
 
         if (self.x, self.y) == (200, 435):
@@ -274,10 +274,10 @@ class Inkey(Ghost):
         if (self.x, self.y) == (425, 350):
             self.direction = "RIGHT"
 
-        if (self.x, self.y) == (567.5, 350):
+        if (self.x, self.y) == (567, 350):
             self.direction = "DOWN"
 
-        if (self.x, self.y) == (567.5, 435):
+        if (self.x, self.y) == (567, 435):
             self.direction = "RIGHT"
 
         if (self.x, self.y) == (650, 435):

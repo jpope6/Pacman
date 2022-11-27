@@ -21,7 +21,7 @@ class Pellets:
         self.pellet_list = []
         self.node_x_done = []
         self.node_y_done = []
-        self.x_list = [50, 475, 200, 287.5, 650, 745]
+        self.x_list = [50, 475, 200, 287, 650, 745]
         self.y_list = [50, 165, 620, 710, 800]
         self.bigPelletList = [(50, 108), (800, 108), (50, 710), (800, 710)]
         self.screen = screen
@@ -46,12 +46,7 @@ class Pellets:
             if node.x in self.x_list:
                 end = node
                 while end.neighbors["RIGHT"] and end not in self.node_x_done:
-                    if (
-                        end.x == 287.5
-                        and end.y == 350
-                        or end.x == 287.5
-                        and end.y == 530
-                    ):
+                    if end.x == 287 and end.y == 350 or end.x == 287 and end.y == 530:
                         break
 
                     if end.x == 200 and end.y == 435 or end.x == 650 and end.y == 435:
@@ -91,15 +86,15 @@ class Pellets:
         self.pellet_list.append(Pellet(800, 50))
         self.pellet_list.append(Pellet(50, 255))
         self.pellet_list.append(Pellet(800, 255))
-        self.pellet_list.append(Pellet(287.5, 255))
+        self.pellet_list.append(Pellet(287, 255))
         self.pellet_list.append(Pellet(375, 255))
         self.pellet_list.append(Pellet(475, 255))
-        self.pellet_list.append(Pellet(562.5, 255))
+        self.pellet_list.append(Pellet(562, 255))
         self.pellet_list.append(Pellet(375, 50))
         self.pellet_list.append(Pellet(475, 50))
         self.pellet_list.append(Pellet(50, 620))
         self.pellet_list.append(Pellet(800, 620))
-        self.pellet_list.append(Pellet(287.5, 620))
+        self.pellet_list.append(Pellet(287, 620))
         self.pellet_list.append(Pellet(375, 620))
         self.pellet_list.append(Pellet(475, 620))
         self.pellet_list.append(Pellet(375, 710))
@@ -108,10 +103,10 @@ class Pellets:
         self.pellet_list.append(Pellet(745, 710))
         self.pellet_list.append(Pellet(50, 800))
         self.pellet_list.append(Pellet(200, 800))
-        self.pellet_list.append(Pellet(287.5, 800))
+        self.pellet_list.append(Pellet(287, 800))
         self.pellet_list.append(Pellet(375, 800))
         self.pellet_list.append(Pellet(475, 800))
-        self.pellet_list.append(Pellet(567.5, 800))
+        self.pellet_list.append(Pellet(567, 800))
         self.pellet_list.append(Pellet(650, 800))
         self.pellet_list.append(Pellet(50, 890))
         self.pellet_list.append(Pellet(800, 890))

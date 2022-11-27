@@ -7,7 +7,14 @@ class Node:
         self.x = x
         self.y = y
         self.coordinates = (self.x, self.y)
-        self.neighbors = {"LEFT": None, "RIGHT": None, "UP": None, "DOWN": None}
+        self.neighbors = {
+            "LEFT": None,
+            "RIGHT": None,
+            "UP": None,
+            "DOWN": None,
+            "PORTAL": None,
+        }
+        self.teleport = False
 
     def add_neighbor(self, neighbor, direction):
         other_direction = None
@@ -109,11 +116,11 @@ class Graph:
         node8.add_neighbor(node4, "UP")
         node8.add_neighbor(node7, "LEFT")
 
-        node9 = Node(287.5, 165)
+        node9 = Node(287, 165)
         node9.add_neighbor(node4, "LEFT")
         node9.add_neighbor(node6, "RIGHT")
 
-        node10 = Node(287.5, 255)
+        node10 = Node(287, 255)
         node9.add_neighbor(node10, "DOWN")
 
         node11 = Node(375, 255)
@@ -122,20 +129,20 @@ class Graph:
         node12 = Node(375, 350)
         node12.add_neighbor(node11, "UP")
 
-        node13 = Node(287.5, 350)
+        node13 = Node(287, 350)
         node13.add_neighbor(node12, "RIGHT")
 
-        node14 = Node(287.5, 435)
+        node14 = Node(287, 435)
         node14.add_neighbor(node13, "UP")
 
         node15 = Node(200, 435)
         node15.add_neighbor(node14, "RIGHT")
         node15.add_neighbor(node8, "UP")
 
-        node16 = Node(287.5, 530)
+        node16 = Node(287, 530)
         node16.add_neighbor(node14, "UP")
 
-        node17 = Node(287.5, 620)
+        node17 = Node(287, 620)
         node17.add_neighbor(node16, "UP")
 
         node18 = Node(200, 620)
@@ -154,7 +161,7 @@ class Graph:
         node22 = Node(200, 710)
         node22.add_neighbor(node18, "UP")
 
-        node23 = Node(287.5, 710)
+        node23 = Node(287, 710)
         node23.add_neighbor(node22, "LEFT")
 
         node24 = Node(375, 620)
@@ -174,7 +181,7 @@ class Graph:
         node28.add_neighbor(node26, "LEFT")
         node28.add_neighbor(node22, "UP")
 
-        node29 = Node(287.5, 800)
+        node29 = Node(287, 800)
         node29.add_neighbor(node23, "UP")
 
         node30 = Node(375, 800)
@@ -193,10 +200,10 @@ class Graph:
         node34 = Node(475, 50)
         node34.add_neighbor(node33, "DOWN")
 
-        node35 = Node(562.5, 165)
+        node35 = Node(562, 165)
         node35.add_neighbor(node33, "LEFT")
 
-        node36 = Node(562.5, 255)
+        node36 = Node(562, 255)
         node36.add_neighbor(node35, "UP")
 
         node37 = Node(475, 255)
@@ -226,21 +233,21 @@ class Graph:
         node44 = Node(475, 350)
         node44.add_neighbor(node37, "UP")
 
-        node45 = Node(567.5, 350)
+        node45 = Node(567, 350)
         node45.add_neighbor(node44, "LEFT")
 
-        node46 = Node(567.5, 435)
+        node46 = Node(567, 435)
         node46.add_neighbor(node45, "UP")
 
         node47 = Node(650, 435)
         node47.add_neighbor(node43, "UP")
         node47.add_neighbor(node46, "LEFT")
 
-        node48 = Node(567.5, 530)
+        node48 = Node(567, 530)
         node48.add_neighbor(node46, "UP")
         node48.add_neighbor(node16, "LEFT")
 
-        node49 = Node(567.5, 620)
+        node49 = Node(567, 620)
         node49.add_neighbor(node48, "UP")
 
         node50 = Node(650, 620)
@@ -260,7 +267,7 @@ class Graph:
         node54.add_neighbor(node53, "UP")
         node54.add_neighbor(node25, "LEFT")
 
-        node55 = Node(567.5, 710)
+        node55 = Node(567, 710)
         node55.add_neighbor(node54, "LEFT")
 
         node56 = Node(650, 710)
@@ -270,7 +277,7 @@ class Graph:
         node57 = Node(745, 710)
         node57.add_neighbor(node52, "RIGHT")
 
-        node58 = Node(567.5, 800)
+        node58 = Node(567, 800)
         node58.add_neighbor(node55, "UP")
 
         node59 = Node(475, 800)
@@ -294,7 +301,7 @@ class Graph:
         node64.add_neighbor(node63, "UP")
         node64.add_neighbor(node60, "LEFT")
 
-        node65 = Node(427.5, 710)
+        node65 = Node(427, 710)
         node65.add_neighbor(node25, "LEFT")
         node65.add_neighbor(node54, "RIGHT")
 
