@@ -4,7 +4,7 @@ from threading import Timer as Clock
 
 
 class Ghost:
-    def __init__(self, screen, graph, settings):
+    def __init__(self, screen, graph, settings, pacman):
         self.screen = screen
         self.graph = graph
         self.x = 0
@@ -20,22 +20,47 @@ class Ghost:
         )
         self.timer = Timer(self.dying_images)
         self.settings = settings
+        self.pacman = pacman
         self.spawn = False
         self.dying = False
         self.dying_time = 0
         self.dead = False
 
+    def dyingAndEaten(self):
+        if (
+            (
+                self.x > self.pacman.x - self.pacman.radius
+                and self.x < self.pacman.x + self.pacman.radius
+            )
+            and (
+                self.y > self.pacman.y - self.pacman.radius
+                and self.y < self.pacman.y + self.pacman.radius
+            )
+            and self.dying
+        ):
+            self.dead = True
+            self.move_speed = 0
+
     def dyingModeTimer(self, time):
         if self.dying_time + 2200 > time:
             self.image = self.dying_images[0]
-            self.move_speed = 0.25
+
+            if self.dead:
+                self.move_speed = 0
+            else:
+                self.move_speed = 0.25
 
         if self.dying_time + 2200 <= time and self.dying_time + 3000 > time:
             self.image = self.timer.image()
 
         if self.dying_time + 3000 == time:
             self.dying = False
-            self.move_speed = 0.5
+
+            if self.dead:
+                self.move_speed = 0
+            else:
+                self.move_speed = 0.5
+
             self.settings.pellets.dyingSound = False
 
     def update_node(self):
@@ -53,6 +78,7 @@ class Ghost:
 
     def move(self):
         self.update_node()
+        self.dyingAndEaten()
 
         if self.direction == "UP" and self.node.neighbors["UP"] is not None:
             self.y += self.move_speed * -1
@@ -69,12 +95,11 @@ class Ghost:
 
 
 class Blinky(Ghost):
-    def __init__(self, screen, graph, pacman):
-        super().__init__(screen, graph, pacman)
+    def __init__(self, screen, graph, settings, pacman):
+        super().__init__(screen, graph, settings, pacman)
         self.node = self.graph.nodes[len(self.graph.nodes) - 3]
         self.x = self.node.x
         self.y = self.node.y
-        self.pacman = pacman
         self.goal = self.pacman.target
 
     def moveAround(self):
@@ -94,8 +119,8 @@ class Blinky(Ghost):
 
 
 class Pinky(Ghost):
-    def __init__(self, screen, graph, settings):
-        super().__init__(screen, graph, settings)
+    def __init__(self, screen, graph, settings, pacman):
+        super().__init__(screen, graph, settings, pacman)
         self.node = self.graph.nodes[len(self.graph.nodes) - 3]
         self.x = 365
         self.y = 460
@@ -229,8 +254,8 @@ class Pinky(Ghost):
 
 
 class Inkey(Ghost):
-    def __init__(self, screen, graph, settings):
-        super().__init__(screen, graph, settings)
+    def __init__(self, screen, graph, settings, pacman):
+        super().__init__(screen, graph, settings, pacman)
         self.node = self.graph.nodes[len(self.graph.nodes) - 3]
         self.x = 425
         self.y = 460
@@ -358,8 +383,8 @@ class Inkey(Ghost):
 
 
 class Clyde(Inkey):
-    def __init__(self, screen, graph, settings):
-        super().__init__(screen, graph, settings)
+    def __init__(self, screen, graph, settings, pacman):
+        super().__init__(screen, graph, settings, pacman)
         self.x = 485
         self.image = self.images["RIGHT"]
 

@@ -24,10 +24,10 @@ class Game:
 
         self.pellets = Pellets(self.graph, self.screen, self.settings)
 
-        self.blinky = Blinky(self.screen, self.graph, self.pacman)
-        self.pinky = Pinky(self.screen, self.graph, self.settings)
-        self.inkey = Inkey(self.screen, self.graph, self.settings)
-        self.clyde = Clyde(self.screen, self.graph, self.settings)
+        self.blinky = Blinky(self.screen, self.graph, self.settings, self.pacman)
+        self.pinky = Pinky(self.screen, self.graph, self.settings, self.pacman)
+        self.inkey = Inkey(self.screen, self.graph, self.settings, self.pacman)
+        self.clyde = Clyde(self.screen, self.graph, self.settings, self.pacman)
 
         self.settings.ghosts = [self.blinky, self.pinky, self.inkey, self.clyde]
         self.settings.pellets = self.pellets
