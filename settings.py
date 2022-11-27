@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+from sound import Sound
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -18,6 +19,7 @@ class Settings:
         self.score = 0
         self.font = pg.font.SysFont(None, 48)
         self.prep_score()
+        self.sounds = Sound()
 
     def check_events(self):
         for event in pg.event.get():

@@ -40,6 +40,7 @@ class Pellets:
             self.pellet_list.remove(pellet)
             self.settings.score += pellet.points
             self.settings.prep_score()
+            self.settings.sounds.play_waka()
 
     def addPelletToList(self):
         for node in self.graph.nodes:
