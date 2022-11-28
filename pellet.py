@@ -1,5 +1,7 @@
 import pygame as pg
 from settings import *
+from timer import *
+import random
 
 
 class Pellet:
@@ -162,3 +164,81 @@ class BigPellet(Pellet):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.radius = 15
+
+
+class Fruit(Pellet):
+    def __init__(self, settings):
+        super().__init__(427, 530)
+        self.points = 500
+
+        self.images = []
+        self.settings = settings
+        self.spritesheet = Spritesheet("./assets/images/pacman-spritesheet.png")
+        self.setImages()
+        self.index = random.randint(0, 5)
+        self.spawn = False
+        self.spawn_frame = 0
+        self.eaten = False
+        self.frame_eaten = 0
+        self.font = pg.font.Font(f"./assets/fonts/PressStart2P-Regular.ttf", 15)
+
+    def setImages(self):
+        self.images = self.spritesheet.images_at(
+            [
+                (257, 129, 32, 32),
+                (289, 129, 32, 32),
+                (321, 129, 32, 32),
+                (257, 161, 32, 32),
+                (289, 161, 32, 32),
+                (321, 161, 32, 32),
+            ],
+            colorkey=(255, 255, 255),
+        )
+
+    def turnOnFruit(self, framerate):
+        if random.randint(0, 3000) == 0 and not self.spawn:
+            self.spawn_frame = framerate
+            self.spawn = True
+
+        if self.spawn and self.spawn_frame + 2500 == framerate:
+            self.spawn = False
+
+    def fruitEaten(self, pacman, framerate):
+        if (
+            (self.x > pacman.x - pacman.radius and self.x < pacman.x + pacman.radius)
+            and (
+                self.y > pacman.y - pacman.radius and self.y < pacman.y + pacman.radius
+            )
+            and not self.eaten
+        ):
+            self.settings.score += self.points
+            self.settings.prep_score()
+            self.frame_eaten = framerate
+            self.eaten = True
+
+            self.settings.sounds.play_fruit()
+
+    def draw(self, screen, framerate):
+        self.turnOnFruit(framerate)
+        self.fruitEaten(self.settings.pacman, framerate)
+
+        if self.spawn:
+            image = self.images[self.index]
+            rect = image.get_rect()
+            rect.left = self.x - 16
+            rect.top = self.y - 16
+            screen.blit(image, rect)
+
+        if self.eaten:
+            text = self.font.render(str(self.points), True, (255, 255, 255))
+            text_rec = text.get_rect(center=(self.x, self.y))
+            screen.blit(text, text_rec)
+            self.spawn = False
+
+            if self.frame_eaten + 500 == framerate:
+                self.eaten = False
+
+    def reset(self):
+        self.spawn = False
+        self.index = random.randint(0, 5)
+        self.spawn_frame = 0

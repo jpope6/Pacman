@@ -23,6 +23,8 @@ class Game:
         self.portals = Portal(self.pacman)
 
         self.pellets = Pellets(self.graph, self.screen, self.settings)
+        self.fruit = Fruit(self.settings)
+        self.settings.fruit = self.fruit
 
         self.blinky = Blinky(self.screen, self.graph, self.settings, self.pacman)
         self.pinky = Pinky(self.screen, self.graph, self.settings, self.pacman)
@@ -36,7 +38,9 @@ class Game:
         self.playable = False
 
         self.game_over = False
+        self.won = False
         self.game_over_frame = 0
+        self.won_frame = 0
 
         self.settings.frame_count = 0
 
@@ -48,8 +52,10 @@ class Game:
         self.pellets.reset()
         self.settings.reset(self.screen)
         self.pacman.lives = 3
+        self.menu.check_for_high_score()
         self.game_over = False
         self.settings.frame_count = 0
+        self.fruit.reset()
 
     def play(self):
         while True:
@@ -78,6 +84,11 @@ class Game:
                 self.graph.draw_edge()
                 self.pellets.drawPellets(self.pacman)
 
+                if len(self.pellets.pellet_list) == 0 and not self.won:
+                    self.playable = False
+                    self.won_frame = self.settings.frame_count
+                    self.won = True
+
                 # self.pinky.draw(self.settings.frame_count)
                 # self.inkey.draw(self.settings.frame_count)
                 # self.clyde.draw(self.settings.frame_count)
@@ -103,6 +114,7 @@ class Game:
                     self.clyde.moveAround()
                     self.clyde.move(self.settings.frame_count)
                     self.portals.drawPortal(self.screen, self.settings.frame_count)
+                    self.fruit.draw(self.screen, self.settings.frame_count)
 
                 if self.game_over:
                     text = self.settings.font.render("GAME OVER", True, (255, 255, 255))
@@ -110,6 +122,18 @@ class Game:
                         center=(self.settings.screen_width / 2, 530)
                     )
                     self.screen.blit(text, text_rec)
+
+                if self.won:
+                    text = self.settings.font.render("YOU WIN", True, (255, 255, 255))
+                    text_rec = text.get_rect(
+                        center=(self.settings.screen_width / 2, 530)
+                    )
+                    self.screen.blit(text, text_rec)
+
+                    if self.won_frame + 800 == self.settings.frame_count:
+                        self.fullReset()
+                        self.cur_menu = "menu"
+                        self.won = False
 
                 self.pacman.draw()
                 self.pacman.drawLives(self.settings.frame_count)

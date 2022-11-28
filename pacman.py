@@ -188,6 +188,7 @@ class Pacman:
             self.image = self.left_timer.image()
             self.dead = False
             self.score_from_death = 0
+            self.settings.fruit.spawn = False
 
             for ghost in self.settings.ghosts:
                 ghost.reset()

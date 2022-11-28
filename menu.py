@@ -41,6 +41,7 @@ class Menu:
     def __init__(self, game):
         self.game = game
         self.screen = self.game.screen
+        self.settings = self.game.settings
         self.menu_running = True
         self.menu_mouse_pos = (0, 0)
 
@@ -118,10 +119,10 @@ class Menu:
         self.menu_mouse_pos = pg.mouse.get_pos()
         hs = "High Scores"
         color = (255, 255, 255)
-        text = pg.font.Font(f"./assets/fonts/PressStart2P-Regular.ttf", 30).render(
+        text = pg.font.Font(f"./assets/fonts/PressStart2P-Regular.ttf", 50).render(
             hs, True, color
         )
-        text_rec = text.get_rect(center=(225, 75))
+        text_rec = text.get_rect(center=(self.settings.screen_width / 2, 100))
         self.screen.blit(text, text_rec)
         color1 = "White"
         count = 0
@@ -129,9 +130,11 @@ class Menu:
         line = file.readline
         for line in file:
             text1 = pg.font.Font(f"./assets/fonts/PressStart2P-Regular.ttf", 30).render(
-                line, True, color1
+                line[:-1], True, color1
             )
-            text1_rec = text1.get_rect(center=(225, 150 + 50 * count))
+            text1_rec = text1.get_rect(
+                center=(self.settings.screen_width / 2, 200 + 50 * count)
+            )
             self.screen.blit(text1, text1_rec)
             count += 1
         file.close()
@@ -139,3 +142,26 @@ class Menu:
         for button in [self.BACK_BUTTON]:
             button.changeColor(self.menu_mouse_pos)
             button.update(screen=self.screen)
+
+    def check_for_high_score(self):
+        text = []
+        file = open("highscores.txt", "r")
+
+        for line in file:
+            text.append(int(line[3:]))
+
+        file.close()
+        file = open("highscores.txt", "w")
+
+        for num in text:
+            # new high score
+            if self.settings.score >= num:
+                text.insert(text.index(num), self.settings.score)
+                del text[-1]
+                break
+
+        n = 1
+
+        for num in text:
+            file.write(str(n) + ". " + str(num) + "\n")
+            n += 1
