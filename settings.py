@@ -21,6 +21,7 @@ class Settings:
         self.prep_score()
         self.sounds = Sound()
         self.sound_playing = False
+        self.game_over_frame = 0
 
     def check_events(self):
         for event in pg.event.get():
@@ -65,3 +66,10 @@ class Settings:
 
     def draw(self, screen):
         screen.blit(self.score_image, self.score_rect)
+
+    def reset(self, screen):
+        self.score = 0
+        self.sound_playing = False
+        self.game_over_frame = 0
+        self.prep_score()
+        self.draw(screen)

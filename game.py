@@ -35,6 +35,20 @@ class Game:
         self.menu = Menu(self)
         self.playable = False
 
+        self.game_over = False
+        self.game_over_frame = 0
+
+        self.settings.frame_count = 0
+
+    def fullReset(self):
+        for ghost in self.settings.ghosts:
+            ghost.reset()
+
+        self.pacman.reset()
+        self.pellets.reset()
+        self.settings.reset(self.screen)
+        self.pacman.lives = 3
+        self.game_over = False
         self.settings.frame_count = 0
 
     def play(self):
@@ -90,12 +104,18 @@ class Game:
                     self.clyde.move(self.settings.frame_count)
                     self.portals.drawPortal(self.screen, self.settings.frame_count)
 
+                if self.game_over:
+                    text = self.settings.font.render("GAME OVER", True, (255, 255, 255))
+                    text_rec = text.get_rect(
+                        center=(self.settings.screen_width / 2, 530)
+                    )
+                    self.screen.blit(text, text_rec)
+
                 self.pacman.draw()
-                self.pacman.drawLives()
+                self.pacman.drawLives(self.settings.frame_count)
                 self.settings.draw(self.screen)
 
                 # pg.draw.circle(self.screen, WHITE, (475, 165), 20)
-
             self.settings.frame_count += 1
             pg.display.update()
 

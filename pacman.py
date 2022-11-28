@@ -142,7 +142,18 @@ class Pacman:
 
         # pg.draw.circle(self.screen, (255, 255, 0), (self.x, self.y), self.radius)
 
-    def drawLives(self):
+    def drawLives(self, framerate):
+        if self.lives == 0:
+            self.settings.game.game_over = True
+            self.settings.game.playable = False
+
+            if self.settings.game.game_over_frame == 0:
+                self.settings.game.game_over_frame = framerate
+
+            if self.settings.game.game_over_frame + 800 == framerate:
+                self.settings.game.cur_menu = "menu"
+                self.settings.game.fullReset()
+
         if self.lives > 0:
             image = self.images["LEFT"][0]
             rect = image.get_rect()
@@ -180,3 +191,15 @@ class Pacman:
 
             for ghost in self.settings.ghosts:
                 ghost.reset()
+
+        if self.lives == 0:
+            self.node = self.graph.nodes[len(self.graph.nodes) - 4]
+            self.target = None
+            self.x = self.node.x
+            self.y = self.node.y
+            self.direction = "STOP"
+            self.target_direction = "STOP"
+            self.onNode = True
+            self.image = self.left_timer.image()
+            self.dead = False
+            self.score_from_death = 0

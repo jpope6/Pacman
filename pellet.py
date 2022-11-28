@@ -147,6 +147,16 @@ class Pellets:
             pellet.draw(self.screen)
             self.pelletEaten(pacman, pellet)
 
+    def reset(self):
+        self.pellet_list = []
+        self.node_x_done = []
+        self.node_y_done = []
+        self.x_list = [50, 475, 200, 287, 650, 745]
+        self.y_list = [50, 165, 620, 710, 800]
+        self.bigPelletList = [(50, 108), (800, 108), (50, 710), (800, 710)]
+        self.addPelletToList()
+        self.dyingSound = False
+
 
 class BigPellet(Pellet):
     def __init__(self, x, y):
