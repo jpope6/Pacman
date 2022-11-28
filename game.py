@@ -29,7 +29,7 @@ class Game:
         self.inkey = Inkey(self.screen, self.graph, self.settings, self.pacman)
         self.clyde = Clyde(self.screen, self.graph, self.settings, self.pacman)
 
-        self.settings.ghosts = [self.pinky, self.inkey, self.clyde]
+        self.settings.ghosts = [self.blinky, self.pinky, self.inkey, self.clyde]
         self.settings.pellets = self.pellets
 
         self.menu = Menu(self)
@@ -56,14 +56,14 @@ class Game:
 
                 if cur_frame + 2000 == self.settings.frame_count:
                     self.playable = True
+                    self.blinky.direction = "LEFT"
 
                 pg.Surface.blit(self.screen, self.settings.maze, (0, 0))
 
                 self.graph.draw()
-                # self.graph.draw_edge()
+                self.graph.draw_edge()
                 self.pellets.drawPellets(self.pacman)
 
-                # self.blinky.draw()
                 # self.pinky.draw(self.settings.frame_count)
                 # self.inkey.draw(self.settings.frame_count)
                 # self.clyde.draw(self.settings.frame_count)
@@ -78,7 +78,10 @@ class Game:
                 if self.playable:
                     self.pacman.move()
                     # self.blinky.moveAround()
-                    # self.blinky.move()
+                    self.blinky.search(self.settings.frame_count)
+                    self.blinky.canChangeDirection(self.settings.frame_count)
+                    self.blinky.move()
+                    self.blinky.teleport_node()
                     self.pinky.moveAround()
                     self.pinky.move()
                     self.inkey.moveAround()

@@ -15,6 +15,12 @@ class Node:
             "PORTAL": None,
         }
         self.teleport = False
+        self.cost = {
+            "LEFT": 20000,
+            "RIGHT": 20000,
+            "UP": 20000,
+            "DOWN": 20000,
+        }
 
     def add_neighbor(self, neighbor, direction):
         other_direction = None
@@ -47,33 +53,37 @@ class Graph:
     def draw_edge(self):
         for node in self.nodes:
             if node.neighbors["DOWN"] is not None:
-                pg.draw.line(
-                    self.screen,
-                    WHITE,
-                    node.coordinates,
-                    node.neighbors["DOWN"].coordinates,
-                )
+                # pg.draw.line(
+                #     self.screen,
+                #     WHITE,
+                #     node.coordinates,
+                #     node.neighbors["DOWN"].coordinates,
+                # )
+                node.cost["DOWN"] = abs(node.y - node.neighbors["DOWN"].y)
             if node.neighbors["UP"] is not None:
-                pg.draw.line(
-                    self.screen,
-                    WHITE,
-                    node.coordinates,
-                    node.neighbors["UP"].coordinates,
-                )
+                # pg.draw.line(
+                #     self.screen,
+                #     WHITE,
+                #     node.coordinates,
+                #     node.neighbors["UP"].coordinates,
+                # )
+                node.cost["UP"] = abs(node.y - node.neighbors["UP"].y)
             if node.neighbors["LEFT"] is not None:
-                pg.draw.line(
-                    self.screen,
-                    WHITE,
-                    node.coordinates,
-                    node.neighbors["LEFT"].coordinates,
-                )
+                # pg.draw.line(
+                #     self.screen,
+                #     WHITE,
+                #     node.coordinates,
+                #     node.neighbors["LEFT"].coordinates,
+                # )
+                node.cost["LEFT"] = abs(node.x - node.neighbors["LEFT"].x)
             if node.neighbors["RIGHT"] is not None:
-                pg.draw.line(
-                    self.screen,
-                    WHITE,
-                    node.coordinates,
-                    node.neighbors["RIGHT"].coordinates,
-                )
+                # pg.draw.line(
+                #     self.screen,
+                #     WHITE,
+                #     node.coordinates,
+                #     node.neighbors["RIGHT"].coordinates,
+                # )
+                node.cost["RIGHT"] = abs(node.x - node.neighbors["RIGHT"].x)
 
     def add_edge(self, node_from, node_to):
         node_from.add_neighbor(node_to)

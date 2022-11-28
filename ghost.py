@@ -1,5 +1,6 @@
 import pygame as pg
 from timer import *
+import random
 
 
 class Ghost:
@@ -136,21 +137,90 @@ class Blinky(Ghost):
         self.x = self.node.x
         self.y = self.node.y
         self.goal = self.pacman.target
+        self.direction_change = True
+        self.setImages()
+        self.image = self.images["LEFT"]
 
-    def moveAround(self):
-        if self.pacman.y < self.y and self.onNode and self.node.neighbors["UP"]:
-            self.direction = "UP"
-        elif self.pacman.x < self.x and self.onNode and self.node.neighbors["RIGHT"]:
-            self.direction = "RIGHT"
-        elif self.pacman.y > self.y and self.onNode and self.node.neighbors["DOWN"]:
-            self.direction = "DOWN"
-        elif self.pacman.x > self.x and self.onNode and self.node.neighbors["LEFT"]:
-            self.direction = "LEFT"
+    def checkOppositeDirection(self, direction):
+        if not self.direction_change:
+            return False
+        if direction == "LEFT" and self.direction == "RIGHT":
+            return False
+        if direction == "RIGHT" and self.direction == "LEFT":
+            return False
+        if direction == "DOWN" and self.direction == "UP":
+            return False
+        if direction == "UP" and self.direction == "DOWN":
+            return False
 
-    def draw(self):
-        pg.draw.rect(
-            self.screen, (255, 0, 0), pg.Rect(self.x - 15, self.y - 15, 30, 30)
-        )
+        return True
+
+    def search(self, framerate):
+        if not self.onNode:
+            return
+
+        directions = ["LEFT", "RIGHT", "UP", "DOWN"]
+        number = random.randrange(0, 4)
+
+        if self.node.neighbors[directions[number]]:
+            if self.checkOppositeDirection(directions[number]):
+                self.direction = directions[number]
+                self.direction_change = False
+                self.frame_change = framerate
+
+                if directions[number] == "DOWN" or directions[number] == "UP":
+                    self.x = self.node.neighbors[directions[number]].x
+                elif directions[number] == "RIGHT" or directions[number] == "LEFT":
+                    self.y = self.node.neighbors[directions[number]].y
+
+                print(self.direction)
+        else:
+            self.search(framerate)
+
+    def teleport_node(self):
+        if self.x < 1 and self.direction == "LEFT":
+            self.x = self.graph.node_right.x
+            self.node = self.graph.node_right
+
+        if self.x > 845 and self.direction == "RIGHT":
+            self.x = self.graph.node_left.x
+            self.node = self.graph.node_left
+
+    def canChangeDirection(self, framerate):
+        if self.direction_change == False:
+            if self.frame_change + 10 == framerate:
+                self.direction_change = True
+
+    def setImages(self):
+        self.images["LEFT"] = self.spritesheet.image_at((0, 129, 32, 32))
+        self.images["RIGHT"] = self.spritesheet.image_at((0, 161, 32, 32))
+        self.images["DOWN"] = self.spritesheet.image_at((0, 97, 32, 32))
+        self.images["UP"] = self.spritesheet.image_at((0, 65, 32, 32))
+
+    def draw(self, time):
+        if self.dying and not self.dead:
+            self.dyingModeTimer(time)
+        elif self.direction == "LEFT":
+            self.image = self.images["LEFT"]
+        elif self.direction == "RIGHT":
+            self.image = self.images["RIGHT"]
+        elif self.direction == "DOWN":
+            self.image = self.images["DOWN"]
+        elif self.direction == "UP":
+            self.image = self.images["UP"]
+
+        rect = self.image.get_rect()
+        rect.left = self.x - 16
+        rect.top = self.y - 16
+        self.screen.blit(self.image, rect)
+
+    def reset(self):
+        self.node = self.graph.nodes[len(self.graph.nodes) - 3]
+        self.x = self.node.x
+        self.y = self.node.y
+        self.goal = self.pacman.target
+        self.direction_change = True
+        self.direction = "STOP"
 
 
 class Pinky(Ghost):

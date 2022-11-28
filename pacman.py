@@ -9,12 +9,12 @@ class Pacman:
         self.graph = graph
         self.settings = settings
         self.node = self.graph.nodes[len(self.graph.nodes) - 4]
-        self.target = None
+        self.target = self.node.neighbors["LEFT"]
         self.x = self.node.x
         self.y = self.node.y
         self.move_speed = 0.5
-        self.direction = "STOP"
-        self.target_direction = "STOP"
+        self.direction = "LEFT"
+        self.target_direction = "LEFT"
         self.onNode = True
         self.radius = 20
         self.spritesheet = Spritesheet("./assets/images/pacman-spritesheet.png")
