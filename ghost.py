@@ -19,7 +19,13 @@ class Ghost:
             [(161, 65, 30, 30), (161, 97, 30, 30)]
         )
         self.timer = Timer(self.dying_images)
-        self.dead_images = {"LEFT": None, "RIGHT": None, "DOWN": None, "UP": None}
+        self.dead_images = {
+            "LEFT": None,
+            "RIGHT": None,
+            "DOWN": None,
+            "UP": None,
+            "STOP": None,
+        }
         self.setDeadImages()
         self.settings = settings
         self.pacman = pacman
@@ -34,14 +40,16 @@ class Ghost:
         self.score_checked = False
         self.score = "0"
         self.scoreFromDeath = 0
+        self.death_frame = 0
 
     def setDeadImages(self):
         self.dead_images["LEFT"] = self.spritesheet.image_at((129, 129, 32, 32))
         self.dead_images["RIGHT"] = self.spritesheet.image_at((129, 161, 32, 32))
         self.dead_images["DOWN"] = self.spritesheet.image_at((129, 97, 32, 32))
         self.dead_images["UP"] = self.spritesheet.image_at((129, 65, 32, 32))
+        self.dead_images["STOP"] = self.spritesheet.image_at((129, 129, 32, 32))
 
-    def dyingAndEaten(self):
+    def dyingAndEaten(self, framerate):
         if (
             self.x > self.pacman.x - self.pacman.radius
             and self.x < self.pacman.x + self.pacman.radius
@@ -50,7 +58,8 @@ class Ghost:
             and self.y < self.pacman.y + self.pacman.radius
         ):
             if self.dying and not self.dead:
-                self.move_speed = 0
+                self.move_speed = 0.5
+                self.death_frame = framerate
                 self.dead = True
             if not self.dying:
                 self.pacman.dead = True
@@ -60,7 +69,7 @@ class Ghost:
             self.image = self.dying_images[0]
 
             if self.dead:
-                self.move_speed = 0
+                self.move_speed = 0.5
             else:
                 self.move_speed = 0.25
 
@@ -71,7 +80,7 @@ class Ghost:
             self.dying = False
 
             if self.dead:
-                self.move_speed = 0
+                self.move_speed = 0.5
             else:
                 self.move_speed = 0.5
 
@@ -91,9 +100,9 @@ class Ghost:
         if self.onNode:
             self.direction = self.target_direction
 
-    def move(self):
+    def move(self, framerate):
         self.update_node()
-        self.dyingAndEaten()
+        self.dyingAndEaten(framerate)
 
         if self.direction == "UP" and self.node.neighbors["UP"] is not None:
             self.y += self.move_speed * -1
@@ -118,16 +127,64 @@ class Ghost:
             self.multiplied = False
             self.score_checked = False
 
-    def drawDead(self):
-        if not self.score_checked:
-            self.score = str(self.scores[self.settings.index])
-            self.score_checked = True
+    # def drawDead(self, framerate):
+    #     if not self.score_checked:
+    #         self.score = str(self.scores[self.settings.index])
+    #         self.image_x = self.x
+    #         self.image_y = self.y
+    #         self.score_checked = True
+    #
+    #     if self.death_frame + 1000:
+    #         self.dead = False
+    #
+    #     text = self.font.render(self.score, True, (255, 255, 255))
+    #     text_rec = text.get_rect(center=(self.image_x, self.image_y))
+    #     self.screen.blit(text, text_rec)
+    #
+    #     self.incrementScore()
 
-        text = self.font.render(self.score, True, (255, 255, 255))
-        text_rec = text.get_rect(center=(self.x, self.y))
-        self.image = self.dead_images[self.direction]
-        self.screen.blit(text, text_rec)
-        self.incrementScore()
+    def goHome(self):
+        self.drawDead()
+
+        if not self.onNode:
+            return
+
+        x_diff = abs(self.x - 425)
+        y_diff = abs(self.y - 350)
+
+        if x_diff > y_diff:
+            if self.x < 425 and self.node.neighbors["RIGHT"] is not None:
+                self.direction = "RIGHT"
+                self.y = self.node.neighbors["RIGHT"].y
+
+            elif self.x > 425 and self.node.neighbors["LEFT"] is not None:
+                self.direction = "LEFT"
+                self.y = self.node.neighbors["LEFT"].y
+            elif self.node.neighbors["UP"] is not None:
+                self.direction = "UP"
+                self.x = self.node.neighbors["UP"].x
+            elif self.node.neighbors["DOWN"] is not None:
+                self.direction = "DOWN"
+                self.x = self.node.neighbors["DOWN"].x
+
+        elif y_diff > x_diff:
+            if self.y < 350 and self.node.neighbors["DOWN"] is not None:
+                self.direction = "DOWN"
+                self.x = self.node.neighbors["DOWN"].x
+
+            elif self.y > 350 and self.node.neighbors["UP"] is not None:
+                self.direction = "UP"
+                self.x = self.node.neighbors["UP"].x
+            elif self.node.neighbors["RIGHT"] is not None:
+                self.direction = "RIGHT"
+                self.y = self.node.neighbors["RIGHT"].y
+
+            elif self.node.neighbors["LEFT"] is not None:
+                self.direction = "LEFT"
+                self.y = self.node.neighbors["LEFT"].y
+
+        elif self.x == 425 and self.y == 350:
+            self.direction == "STOP"
 
 
 class Blinky(Ghost):
@@ -159,6 +216,9 @@ class Blinky(Ghost):
         if not self.onNode:
             return
 
+        if self.dead:
+            return
+
         directions = ["LEFT", "RIGHT", "UP", "DOWN"]
         number = random.randrange(0, 4)
 
@@ -172,8 +232,6 @@ class Blinky(Ghost):
                     self.x = self.node.neighbors[directions[number]].x
                 elif directions[number] == "RIGHT" or directions[number] == "LEFT":
                     self.y = self.node.neighbors[directions[number]].y
-
-                print(self.direction)
         else:
             self.search(framerate)
 
@@ -221,6 +279,24 @@ class Blinky(Ghost):
         self.goal = self.pacman.target
         self.direction_change = True
         self.direction = "STOP"
+        self.dying = False
+
+    def drawDead(self, framerate):
+        if not self.score_checked:
+            self.score = str(self.scores[self.settings.index])
+            self.image_x = self.x
+            self.image_y = self.y
+            self.score_checked = True
+
+        if self.death_frame + 1000 == framerate:
+            self.reset()
+            self.dead = False
+
+        text = self.font.render(self.score, True, (255, 255, 255))
+        text_rec = text.get_rect(center=(self.image_x, self.image_y))
+        self.screen.blit(text, text_rec)
+
+        self.incrementScore()
 
 
 class Pinky(Ghost):
@@ -260,8 +336,12 @@ class Pinky(Ghost):
         self.image = self.images["LEFT"]
         self.spawn = False
         self.direction = "STOP"
+        self.dying = False
 
     def moveAround(self):
+        if self.dead:
+            return
+
         self.spawnToNode()
 
         if (self.x, self.y) == (425, 350):
@@ -365,6 +445,23 @@ class Pinky(Ghost):
         rect.top = self.y - 16
         self.screen.blit(self.image, rect)
 
+    def drawDead(self, framerate):
+        if not self.score_checked:
+            self.score = str(self.scores[self.settings.index])
+            self.image_x = self.x
+            self.image_y = self.y
+            self.score_checked = True
+
+        if self.death_frame + 1000 == framerate:
+            self.reset()
+            self.dead = False
+
+        text = self.font.render(self.score, True, (255, 255, 255))
+        text_rec = text.get_rect(center=(self.image_x, self.image_y))
+        self.screen.blit(text, text_rec)
+
+        self.incrementScore()
+
 
 class Inkey(Ghost):
     def __init__(self, screen, graph, settings, pacman):
@@ -414,8 +511,12 @@ class Inkey(Ghost):
         self.image = self.images["UP"]
         self.spawn = False
         self.direction = "STOP"
+        self.dying = False
 
     def moveAround(self):
+        if self.dead:
+            return
+
         self.spawnToNode()
 
         if (self.x, self.y) == (425, 350):
@@ -502,6 +603,23 @@ class Inkey(Ghost):
         if (self.x, self.y) == (650, 255):
             self.direction = "DOWN"
 
+    def drawDead(self, framerate):
+        if not self.score_checked:
+            self.score = str(self.scores[self.settings.index])
+            self.image_x = self.x
+            self.image_y = self.y
+            self.score_checked = True
+
+        if self.death_frame + 1000 == framerate:
+            self.reset()
+            self.dead = False
+
+        text = self.font.render(self.score, True, (255, 255, 255))
+        text_rec = text.get_rect(center=(self.image_x, self.image_y))
+        self.screen.blit(text, text_rec)
+
+        self.incrementScore()
+
 
 class Clyde(Inkey):
     def __init__(self, screen, graph, settings, pacman):
@@ -537,3 +655,21 @@ class Clyde(Inkey):
         self.image = self.images["RIGHT"]
         self.spawn = False
         self.direction = "STOP"
+        self.dying = False
+
+    def drawDead(self, framerate):
+        if not self.score_checked:
+            self.score = str(self.scores[self.settings.index])
+            self.image_x = self.x
+            self.image_y = self.y
+            self.score_checked = True
+
+        if self.death_frame + 1000 == framerate:
+            self.reset()
+            self.dead = False
+
+        text = self.font.render(self.score, True, (255, 255, 255))
+        text_rec = text.get_rect(center=(self.image_x, self.image_y))
+        self.screen.blit(text, text_rec)
+
+        self.incrementScore()

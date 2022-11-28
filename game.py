@@ -70,7 +70,7 @@ class Game:
 
                 for ghost in self.settings.ghosts:
                     if ghost.dead:
-                        ghost.drawDead()
+                        ghost.drawDead(self.settings.frame_count)
                     else:
                         ghost.incrementScore()
                         ghost.draw(self.settings.frame_count)
@@ -80,14 +80,14 @@ class Game:
                     # self.blinky.moveAround()
                     self.blinky.search(self.settings.frame_count)
                     self.blinky.canChangeDirection(self.settings.frame_count)
-                    self.blinky.move()
+                    self.blinky.move(self.settings.frame_count)
                     self.blinky.teleport_node()
                     self.pinky.moveAround()
-                    self.pinky.move()
+                    self.pinky.move(self.settings.frame_count)
                     self.inkey.moveAround()
-                    self.inkey.move()
+                    self.inkey.move(self.settings.frame_count)
                     self.clyde.moveAround()
-                    self.clyde.move()
+                    self.clyde.move(self.settings.frame_count)
                     self.portals.drawPortal(self.screen, self.settings.frame_count)
 
                 self.pacman.draw()

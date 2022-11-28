@@ -28,6 +28,7 @@ class Pacman:
         self.lives = 3
         self.lives_x = 780
         self.score_from_death = 0
+        self.index = 0
 
     def setDeadImages(self):
         self.deadImages = self.spritesheet.images_at(
@@ -123,6 +124,7 @@ class Pacman:
             self.image = self.dead_timer.image()
             self.direction = "STOP"
             if self.dead_timer.is_expired():
+                self.dead_timer.index = 0
                 self.reset()
         elif self.direction == "LEFT":
             self.image = self.left_timer.image()
