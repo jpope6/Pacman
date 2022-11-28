@@ -48,11 +48,11 @@ class Game:
         for ghost in self.settings.ghosts:
             ghost.reset()
 
+        self.menu.check_for_high_score()
         self.pacman.reset()
         self.pellets.reset()
         self.settings.reset(self.screen)
         self.pacman.lives = 3
-        self.menu.check_for_high_score()
         self.game_over = False
         self.settings.frame_count = 0
         self.fruit.reset()
