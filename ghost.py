@@ -634,7 +634,7 @@ class Clyde(Inkey):
         self.images["UP"] = self.spritesheet.image_at((97, 65, 32, 32))
 
     def spawnToNode(self):
-        if self.pacman.score_from_death >= 10 and self.spawn == False:
+        if self.pacman.score_from_death >= 150 and self.spawn == False:
             if self.y > 420:
                 self.direction = "UP"
                 self.y -= self.move_speed
